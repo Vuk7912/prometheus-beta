@@ -1,1 +1,2 @@
-pytest
+# No additional requirements needed for this project
+# datetime is a standard Python library
