@@ -39,7 +39,7 @@ def test_process_logger_log_with_total():
     sys.stdout = sys.__stdout__
     
     output = captured_output.getvalue()
-    assert '50%' in output
+    assert '50.0%' in output  # Note the decimal point
 
 def test_process_logger_decorator():
     """Test the tracking decorator."""
@@ -60,7 +60,7 @@ def test_process_logger_decorator():
     sys.stdout = sys.__stdout__
     
     output = captured_output.getvalue()
-    assert '100%' in output
+    assert '100.0%' in output  # Note the decimal point
 
 def test_process_logger_decorator_error():
     """Test decorator raises error when total steps not set."""
