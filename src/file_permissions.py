@@ -26,11 +26,11 @@ def get_file_permissions(file_path):
         FileNotFoundError: If the specified file does not exist
         PermissionError: If the file cannot be accessed
     """
+    # Check if file exists
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"File not found: {file_path}")
+    
     try:
-        # Check if file exists
-        if not os.path.exists(file_path):
-            raise FileNotFoundError(f"File not found: {file_path}")
-        
         # Get file stats
         file_stats = os.stat(file_path)
         
@@ -76,5 +76,3 @@ def get_file_permissions(file_path):
         }
     except PermissionError:
         raise PermissionError(f"Permission denied when accessing file: {file_path}")
-    except Exception as e:
-        raise RuntimeError(f"Error retrieving file permissions: {str(e)}")
