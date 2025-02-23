@@ -31,30 +31,31 @@ def compress_lzvn(data):
     current_pos = 0
     
     while current_pos < len(data):
-        # Look for the longest match in the previously seen data
+        # Look for longest repeating sequence
         best_length = 0
         best_distance = 0
         
-        # Search window (limit to 255 bytes back)
+        # Limit search window to 255 bytes back
         search_start = max(0, current_pos - 255)
         
         for search_pos in range(search_start, current_pos):
-            # Try to find the longest match
             match_length = 0
+            
+            # Find match length
             while (current_pos + match_length < len(data) and 
-                   match_length < 15 and  # Limit match length to 15
-                   data[search_pos + match_length] == data[current_pos + match_length]):
+                   data[search_pos + match_length] == data[current_pos + match_length] and
+                   match_length < 15):
                 match_length += 1
             
-            # Update best match if longer
+            # Update best match if found
             if match_length > best_length:
                 best_length = match_length
                 best_distance = current_pos - search_pos
         
-        # Encode token based on match
+        # Encode tokens
         if best_length >= 3:
-            # Compression token: [distance][length]
-            token = ((min(best_distance, 15) << 4) | min(best_length, 15)) & 0xFF
+            # Compression token: high 4 bits for distance, low 4 bits for length
+            token = ((best_distance & 0x0F) << 4) | (best_length & 0x0F)
             compressed.append(token)
             current_pos += best_length
         else:
@@ -103,18 +104,21 @@ def decompress_lzvn(compressed_data):
         else:
             # Matched sequence
             if distance == 0:
-                # Something went wrong, but continue with literal
                 decompressed.append(token)
                 current_pos += 1
                 continue
             
-            # Reconstruct the repeated sequence
-            start_index = len(decompressed) - distance
-            for i in range(length):
-                # Ensure we can safely copy the sequence
-                if start_index + i < 0 or start_index + i >= len(decompressed):
-                    break
-                decompressed.append(decompressed[start_index + i])
+            # Ensure there's enough data to copy
+            if len(decompressed) < distance:
+                decompressed.append(token)
+                current_pos += 1
+                continue
+            
+            # Copy matched sequence
+            start = len(decompressed) - distance
+            for _ in range(length):
+                decompressed.append(decompressed[start])
+                start += 1
             
             current_pos += 1
     
