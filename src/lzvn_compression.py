@@ -59,8 +59,12 @@ def compress_lzvn(data):
         # Encode the current token
         if best_length >= 3:
             # Compression token: [distance][length]
-            compressed.append((best_distance << 4) | best_length)
-            current_pos += best_length
+            # Ensure distance and length are within 4-bit ranges
+            distance = min(best_distance, 255)
+            length = min(best_length, 15)
+            token = ((distance & 0x0F) << 4) | (length & 0x0F)
+            compressed.append(token)
+            current_pos += length
         else:
             # Literal byte
             compressed.append(data[current_pos])
@@ -97,7 +101,7 @@ def decompress_lzvn(compressed_data):
         token = compressed_data[current_pos]
         
         # Extract distance and length
-        distance = token >> 4
+        distance = (token >> 4) & 0x0F
         length = token & 0x0F
         
         if length == 0:
@@ -106,13 +110,18 @@ def decompress_lzvn(compressed_data):
             current_pos += 1
         else:
             # Matched sequence
-            if distance == 0 or current_pos < distance:
+            if distance == 0 and length == 0:
+                # Invalid token
                 raise ValueError("Invalid compression token")
             
+            # Calculate actual distance in the decompressed buffer
+            actual_distance = len(decompressed) - distance
+            
             # Copy repeated sequence
-            start_pos = len(decompressed) - distance
             for i in range(length):
-                decompressed.append(decompressed[start_pos + i])
+                if actual_distance < 0:
+                    raise ValueError("Invalid compression token")
+                decompressed.append(decompressed[actual_distance + i])
             
             current_pos += 1
     
