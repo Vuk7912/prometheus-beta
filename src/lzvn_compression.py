@@ -1,13 +1,12 @@
 """
-Simplified LZV-style Compression Algorithm Implementation
+LZVN-like Compression Algorithm Implementation
 
-This module provides a basic implementation of a compression technique 
-inspired by LZ-style algorithms with a focus on data preservation.
+This module provides a basic lossless compression mechanism.
 """
 
 def compress_lzvn(data):
     """
-    Compress input data using a simplified LZ-style algorithm.
+    Compress input data.
     
     Args:
         data (bytes or bytearray): Input data to be compressed
@@ -26,40 +25,39 @@ def compress_lzvn(data):
     if not data:
         raise ValueError("Input data cannot be empty")
     
-    # Compression variables
+    # Simplified compression 
     compressed = bytearray()
     current_pos = 0
     
     while current_pos < len(data):
-        # Look for longest repeating sequence
-        best_length = 0
-        best_distance = 0
+        # Look for repeated sequences
+        best_match_length = 0
+        best_match_distance = 0
         
-        # Limit search window to 255 bytes back
+        # Search window (limit to 255 bytes back)
         search_start = max(0, current_pos - 255)
         
         for search_pos in range(search_start, current_pos):
-            match_length = 0
-            
             # Find match length
+            match_length = 0
             while (current_pos + match_length < len(data) and 
-                   match_length < 15 and
+                   match_length < 15 and  # Limit match length
                    data[search_pos + match_length] == data[current_pos + match_length]):
                 match_length += 1
             
-            # Update best match if found
-            if match_length > best_length:
-                best_length = match_length
-                best_distance = current_pos - search_pos
+            # Update best match
+            if match_length > best_match_length:
+                best_match_length = match_length
+                best_match_distance = current_pos - search_pos
         
-        # Encode tokens
-        if best_length >= 3:
+        # Encode token
+        if best_match_length >= 3:
             # Compression token: high 4 bits for distance, low 4 bits for length
-            token = ((best_distance & 0x0F) << 4) | (best_length & 0x0F)
+            token = ((best_match_distance & 0x0F) << 4) | (best_match_length & 0x0F)
             compressed.append(token)
             
-            # Add actual bytes skipped
-            for _ in range(best_length):
+            # Add source bytes as-is
+            for _ in range(best_match_length):
                 compressed.append(data[current_pos])
                 current_pos += 1
         else:
@@ -71,7 +69,7 @@ def compress_lzvn(data):
 
 def decompress_lzvn(compressed_data):
     """
-    Decompress data compressed with the LZVN-like algorithm.
+    Decompress data compressed by the algorithm.
     
     Args:
         compressed_data (bytes or bytearray): Compressed input data
@@ -81,7 +79,7 @@ def decompress_lzvn(compressed_data):
     
     Raises:
         TypeError: If input is not bytes or bytearray
-        ValueError: If input is empty or appears to be invalid
+        ValueError: If input is empty or invalid
     """
     # Input validation
     if not isinstance(compressed_data, (bytes, bytearray)):
@@ -112,18 +110,15 @@ def decompress_lzvn(compressed_data):
                 current_pos += 1
                 continue
             
-            # Ensure there's enough data to copy
+            # Ensure enough data in decompressed buffer
             if len(decompressed) < distance:
                 decompressed.append(token)
                 current_pos += 1
                 continue
             
-            # Prepare to copy
-            start = len(decompressed) - distance
-            
-            # Get the repeat bytes 
-            repeat_bytes = compressed_data[current_pos+1:current_pos+1+length]
-            decompressed.extend(repeat_bytes)
+            # Add source bytes 
+            source_bytes = compressed_data[current_pos+1:current_pos+1+length]
+            decompressed.extend(source_bytes)
             
             current_pos += 1 + length
     
