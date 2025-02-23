@@ -82,17 +82,17 @@ def test_get_file_permissions_no_permissions():
 
 def test_get_file_permissions_non_existent_file():
     # Test for non-existent file
-    with pytest.raises(FileNotFoundError):
+    with pytest.raises(FileNotFoundError, match="File not found"):
         get_file_permissions('/path/to/non/existent/file.txt')
 
 def test_get_file_permissions_unreadable_file(mocker):
-    # Simulate a permission denied scenario
+    # Create a temporary file
     with tempfile.NamedTemporaryFile(delete=False) as temp_file:
         # Patch os.stat to raise a PermissionError
         mocker.patch('os.stat', side_effect=PermissionError("Permission denied"))
         
         # Expect a PermissionError to be raised
-        with pytest.raises(PermissionError):
+        with pytest.raises(PermissionError, match="Permission denied"):
             get_file_permissions(temp_file.name)
     
     # Clean up the temporary file
