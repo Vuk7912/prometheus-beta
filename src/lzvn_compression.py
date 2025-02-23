@@ -1,8 +1,8 @@
 """
-Simple LZVN-like Compression Algorithm Implementation
+Simplified LZV-style Compression Algorithm Implementation
 
 This module provides a basic implementation of a compression technique 
-inspired by LZ-style algorithms.
+inspired by LZ-style algorithms with a focus on data preservation.
 """
 
 def compress_lzvn(data):
@@ -43,8 +43,8 @@ def compress_lzvn(data):
             
             # Find match length
             while (current_pos + match_length < len(data) and 
-                   data[search_pos + match_length] == data[current_pos + match_length] and
-                   match_length < 15):
+                   match_length < 15 and
+                   data[search_pos + match_length] == data[current_pos + match_length]):
                 match_length += 1
             
             # Update best match if found
@@ -57,7 +57,11 @@ def compress_lzvn(data):
             # Compression token: high 4 bits for distance, low 4 bits for length
             token = ((best_distance & 0x0F) << 4) | (best_length & 0x0F)
             compressed.append(token)
-            current_pos += best_length
+            
+            # Add actual bytes skipped
+            for _ in range(best_length):
+                compressed.append(data[current_pos])
+                current_pos += 1
         else:
             # Literal byte
             compressed.append(data[current_pos])
@@ -93,7 +97,7 @@ def decompress_lzvn(compressed_data):
     while current_pos < len(compressed_data):
         token = compressed_data[current_pos]
         
-        # Extract distance and length 
+        # Extract distance and length
         distance = (token >> 4) & 0x0F
         length = token & 0x0F
         
@@ -114,12 +118,13 @@ def decompress_lzvn(compressed_data):
                 current_pos += 1
                 continue
             
-            # Copy matched sequence
+            # Prepare to copy
             start = len(decompressed) - distance
-            for _ in range(length):
-                decompressed.append(decompressed[start])
-                start += 1
             
-            current_pos += 1
+            # Get the repeat bytes 
+            repeat_bytes = compressed_data[current_pos+1:current_pos+1+length]
+            decompressed.extend(repeat_bytes)
+            
+            current_pos += 1 + length
     
     return decompressed
