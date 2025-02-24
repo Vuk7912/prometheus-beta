@@ -2,6 +2,7 @@ import pytest
 from datetime import datetime, timezone
 import sys
 import os
+import re
 
 # Add the src directory to the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
@@ -26,9 +27,8 @@ def test_recent_timestamp():
     current_time = datetime.now(timezone.utc).timestamp()
     result = timestamp_to_human_readable(current_time)
     
-    # Check the format of the result
-    assert len(result) == 25  # YYYY-MM-DD HH:MM:SS UTC
-    assert result.endswith(' UTC')
+    # Use regex to validate the format instead of exact length
+    assert re.match(r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} UTC$', result)
 
 def test_invalid_type_raises_error():
     """Test that non-numeric input raises TypeError"""
