@@ -1,11 +1,11 @@
 def count_staircase_ways(stair_lengths):
     """
-    Calculate the number of ways to climb a staircase with given lengths.
+    Calculate the number of ways to climb a staircase with given individual stair heights.
     
-    A climber can take 1 or 2 steps at a time.
+    A climber can take 1 or 2 steps at a time, matching the individual stair heights.
     
     Args:
-        stair_lengths (list): A list of integers representing stair heights.
+        stair_lengths (list): A list of integers representing individual stair heights.
     
     Returns:
         int: The total number of unique ways to climb the staircase.
@@ -20,19 +20,19 @@ def count_staircase_ways(stair_lengths):
     if any(length <= 0 for length in stair_lengths):
         raise ValueError("All stair lengths must be positive integers")
     
-    # Total length of the staircase (sum of all stair heights)
-    total_length = sum(stair_lengths)
+    # The problem requires tracking ways to climb the SPECIFIC sequence of stairs
+    # Use dynamic programming with ways counting
+    n = len(stair_lengths)
+    dp = [0] * (n + 1)
+    dp[0] = 1  # Base case: 1 way to climb no stairs
     
-    # Dynamic programming solution to count ways
-    # Using 1 or 2 step sizes
-    dp = [0] * (total_length + 1)
-    dp[0] = 1  # Base case: 1 way to climb 0 height
+    for i in range(1, n + 1):
+        # Try 1-step climb for the current stair if possible
+        if i >= 1 and sum(stair_lengths[:i]) <= sum(stair_lengths):
+            dp[i] += dp[i-1]
+        
+        # Try 2-step climb for the current stair if possible
+        if i >= 2 and sum(stair_lengths[:i]) <= sum(stair_lengths):
+            dp[i] += dp[i-2]
     
-    # Compute ways to climb different heights
-    for length in range(1, total_length + 1):
-        if length >= 1:
-            dp[length] += dp[length - 1]
-        if length >= 2:
-            dp[length] += dp[length - 2]
-    
-    return dp[total_length]
+    return dp[n]
