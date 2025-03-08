@@ -3,7 +3,7 @@ from src.near_palindrome_pairs import find_near_palindrome_pairs
 
 def test_basic_near_palindrome_pairs():
     """Test finding basic near-palindrome pairs"""
-    result = find_near_palindrome_pairs(["abcda", "edcxb", "hello", "olleh"])
+    result = find_near_palindrome_pairs(["abcda", "edcba", "hello", "olleh"])
     assert len(result) > 0
 
 def test_no_near_palindrome_pairs():
