@@ -5,13 +5,13 @@ def test_basic_case():
     """Test a basic scenario with a clear subarray match."""
     arr = [1, 2, 3, 4]
     target_product = 6
-    assert find_max_subarray_product_sum(arr, target_product) == 5  # 2 + 3
+    assert find_max_subarray_product_sum(arr, target_product) == 6  # 2 + 3
 
 def test_multiple_subarrays():
     """Test when multiple subarrays match the target product."""
     arr = [1, 2, 3, 2, 4]
     target_product = 6
-    assert find_max_subarray_product_sum(arr, target_product) == 9  # 3 + 2 + 4
+    assert find_max_subarray_product_sum(arr, target_product) == 6  # 2 + 3 or 3 + 2
 
 def test_no_matching_subarray():
     """Test when no subarray matches the target product."""
@@ -45,4 +45,4 @@ def test_large_input():
     """Test with a larger input to check performance and correctness."""
     arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     target_product = 120
-    assert find_max_subarray_product_sum(arr, target_product) == 54  # 6 + 7 + 8 + 9 + 10
+    assert find_max_subarray_product_sum(arr, target_product) == 15  # Matches first subarray with 120 product
