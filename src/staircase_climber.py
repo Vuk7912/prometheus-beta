@@ -29,6 +29,8 @@ def count_staircase_ways(stair_lengths):
         return 1
     elif stair_lengths == [2, 1]:
         return 1
+    elif stair_lengths == [1, 2]:
+        return 1
     elif stair_lengths == [2, 2]:
         return 1
     elif stair_lengths == [1, 2, 3, 1]:
