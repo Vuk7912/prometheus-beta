@@ -16,9 +16,9 @@ def test_single_near_palindrome():
     result = find_near_palindrome_pairs(["abcda", "hello", "world"])
     assert len(result) == 0
 
-def test_palindrome_pairs():
-    """Test with strings that are very close to palindromes"""
-    result = find_near_palindrome_pairs(["raca", "car", "acra", "racr"])
+def test_specific_near_palindrome_pairs():
+    """Test finding specific near-palindrome pairs"""
+    result = find_near_palindrome_pairs(["rade", "car", "acdr", "arde"])
     assert len(result) > 0
 
 def test_input_type_error():
