@@ -26,43 +26,53 @@ def find_near_palindrome_pairs(strings):
     def is_palindrome(s):
         return s == s[::-1]
     
-    # Function to check if a string can become a palindrome
-    def can_become_palindrome(s):
-        # Already a palindrome
+    # Function to check the minimum number of character changes to create a palindrome
+    def min_palindrome_changes(s):
+        n = len(s)
+        left, right = 0, n - 1
+        changes = 0
+        
+        while left < right:
+            if s[left] != s[right]:
+                changes += 1
+            left += 1
+            right -= 1
+        
+        return changes
+    
+    # Function to check if a string can become a palindrome by changing one character
+    def is_nearly_palindrome(s):
+        # If already a palindrome, return False
         if is_palindrome(s):
             return False
         
         n = len(s)
         
-        # Check symmetric differences
-        left, right = 0, n - 1
-        differences = 0
-        
-        while left < right:
-            if s[left] != s[right]:
-                differences += 1
-                
-                # Try removing current left or right character
-                if (is_palindrome(s[left+1:right+1]) or 
-                    is_palindrome(s[left:right])):
+        # Try changing one character
+        for i in range(n):
+            for c in 'abcdefghijklmnopqrstuvwxyz':
+                # Create modified string
+                modified = s[:i] + c + s[i+1:]
+                if is_palindrome(modified):
                     return True
-                
-                # More than one difference means not close
-                if differences > 1:
-                    return False
-            
-            left += 1
-            right -= 1
         
-        return differences == 1
+        # Strict palindrome change check
+        return min_palindrome_changes(s) <= 1
     
     # Find pairs of strings that are both nearly palindromes
     near_palindrome_pairs = []
+    used_pairs = set()  # Track used pairs to prevent duplicates
+    
     for i in range(len(strings)):
         for j in range(i+1, len(strings)):
-            # Check if both strings can become palindromes
-            if (can_become_palindrome(strings[i]) and 
-                can_become_palindrome(strings[j])):
+            # Unique pair tuple for tracking
+            pair_key = tuple(sorted([strings[i], strings[j]]))
+            
+            # Check for near-palindrome pairs
+            if ((is_nearly_palindrome(strings[i]) and 
+                 is_nearly_palindrome(strings[j])) and 
+                 pair_key not in used_pairs):
                 near_palindrome_pairs.append([strings[i], strings[j]])
+                used_pairs.add(pair_key)
     
     return near_palindrome_pairs
