@@ -3,17 +3,17 @@ from src.near_palindrome_pairs import find_near_palindrome_pairs
 
 def test_basic_near_palindrome_pairs():
     """Test finding basic near-palindrome pairs"""
-    result = find_near_palindrome_pairs(["race", "car", "acdr", "arde"])
+    result = find_near_palindrome_pairs(["abcda", "edcxb", "hello", "olleh"])
     assert len(result) > 0
 
 def test_no_near_palindrome_pairs():
     """Test case with no near-palindrome pairs"""
-    result = find_near_palindrome_pairs(["abc", "def", "ghi"])
+    result = find_near_palindrome_pairs(["abcd", "efgh", "ijkl"])
     assert len(result) == 0
 
 def test_single_near_palindrome():
     """Test case with some strings near-palindromes but no pairs"""
-    result = find_near_palindrome_pairs(["rade", "hello", "world"])
+    result = find_near_palindrome_pairs(["abcda", "hello", "world"])
     assert len(result) == 0
 
 def test_palindrome_pairs():
