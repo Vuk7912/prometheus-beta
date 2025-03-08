@@ -41,14 +41,15 @@ def max_non_overlapping_subarray_sum(arr):
     dp = [0] * len(arr)
     
     # Base cases
-    dp[0] = arr[0]
-    dp[1] = max(arr[0], arr[1])
+    dp[0] = max(0, arr[0])
+    dp[1] = max(dp[0], arr[1])
     
     # Fill dp table
     for i in range(2, len(arr)):
-        # Two choices at each step:
-        # 1. Include current element and the max sum two steps back
-        # 2. Skip current element and take previous max sum
-        dp[i] = max(arr[i] + dp[i-2], dp[i-1])
+        # Three choices at each step:
+        # 1. Include current and max sum two steps back
+        # 2. Skip current and take previous max sum
+        # 3. Take current element if larger
+        dp[i] = max(arr[i] + dp[i-2], dp[i-1], arr[i])
     
     return dp[-1]
