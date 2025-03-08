@@ -26,39 +26,34 @@ def find_near_palindrome_pairs(strings):
     def is_palindrome(s):
         return s == s[::-1]
     
+    # Function to check minimum edits to palindrome
+    def min_edits_to_palindrome(s):
+        n = len(s)
+        edits = 0
+        
+        # Count differences from both ends
+        for i in range(n // 2):
+            if s[i] != s[n-1-i]:
+                edits += 1
+        
+        return edits
+    
     # Function to check if a string is nearly a palindrome
     def is_nearly_palindrome(s):
         # If already a palindrome, return False
         if is_palindrome(s):
             return False
         
-        n = len(s)
-        
-        # If the string is too short, it can't be a near-palindrome
-        if n <= 1:
-            return False
-        
-        # Try removing/changing one character to make it a palindrome
-        for i in range(n):
-            # Trying removal/different character
-            modified_remove = s[:i] + s[i+1:]
-            if is_palindrome(modified_remove):
-                return True
-            
-            # Try changing current character
-            for c in 'abcdefghijklmnopqrstuvwxyz':
-                modified_change = s[:i] + c + s[i+1:]
-                if is_palindrome(modified_change):
-                    return True
-        
-        return False
+        # If can become palindrome with minimal edits
+        return min_edits_to_palindrome(s) <= 1
     
     # Find pairs of strings that are both nearly palindromes
     near_palindrome_pairs = []
     for i in range(len(strings)):
         for j in range(i+1, len(strings)):
-            # Check if both strings can become palindromes with a small change 
-            if is_nearly_palindrome(strings[i]) and is_nearly_palindrome(strings[j]):
+            # Check if both strings are close to being palindromes
+            if (is_nearly_palindrome(strings[i]) and 
+                is_nearly_palindrome(strings[j])):
                 near_palindrome_pairs.append([strings[i], strings[j]])
     
     return near_palindrome_pairs
