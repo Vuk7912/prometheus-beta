@@ -38,5 +38,5 @@ def test_empty_list():
 def test_complex_scenarios():
     """Test more complex scenarios"""
     assert max_non_overlapping_subarray_sum([5, -2, 3, 4, -1, 2]) == 11
-    assert max_non_overlapping_subarray_sum([1, 20, 3, 4, 5, 6]) == 26
+    assert max_non_overlapping_subarray_sum([1, 20, 3, 4, 5, 6]) == 30
     assert max_non_overlapping_subarray_sum([10, -3, -4, 7, 6, -2]) == 23
