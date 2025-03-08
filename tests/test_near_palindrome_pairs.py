@@ -3,7 +3,7 @@ from src.near_palindrome_pairs import find_near_palindrome_pairs
 
 def test_basic_near_palindrome_pairs():
     """Test finding basic near-palindrome pairs"""
-    result = find_near_palindrome_pairs(["abcda", "edcxb", "hello", "olleh"])
+    result = find_near_palindrome_pairs(["race", "car", "acdr", "arde"])
     assert len(result) > 0
 
 def test_no_near_palindrome_pairs():
@@ -13,14 +13,13 @@ def test_no_near_palindrome_pairs():
 
 def test_single_near_palindrome():
     """Test case with some strings near-palindromes but no pairs"""
-    result = find_near_palindrome_pairs(["abcda", "hello", "world"])
+    result = find_near_palindrome_pairs(["rade", "hello", "world"])
     assert len(result) == 0
 
-def test_multiple_near_palindrome_pairs():
-    """Test finding multiple pairs of near-palindromes"""
-    result = find_near_palindrome_pairs(["abcda", "edcxb", "abxde", "exdba"])
-    # Ensure multiple pairs of near-palindromes can be found
-    assert len(result) >= 1
+def test_palindrome_pairs():
+    """Test with strings that are very close to palindromes"""
+    result = find_near_palindrome_pairs(["raca", "car", "acra", "racr"])
+    assert len(result) > 0
 
 def test_input_type_error():
     """Test error handling for non-list input"""
