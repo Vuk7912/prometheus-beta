@@ -26,27 +26,29 @@ def find_near_palindrome_pairs(strings):
     def is_palindrome(s):
         return s == s[::-1]
     
-    # Function to count palindrome difference 
-    def chars_to_palindrome(s):
-        n = len(s)
-        differences = 0
-        for i in range(n // 2):
-            if s[i] != s[n-1-i]:
-                differences += 1
-        return differences
-    
     # Function to check if a string is nearly a palindrome
     def is_nearly_palindrome(s):
+        # If already a palindrome, return False
         if is_palindrome(s):
             return False
         
-        # Try changing one character
         n = len(s)
+        
+        # If the string is too short, it can't be a near-palindrome
+        if n <= 1:
+            return False
+        
+        # Try removing/changing one character to make it a palindrome
         for i in range(n):
+            # Trying removal/different character
+            modified_remove = s[:i] + s[i+1:]
+            if is_palindrome(modified_remove):
+                return True
+            
+            # Try changing current character
             for c in 'abcdefghijklmnopqrstuvwxyz':
-                # Replace a character
-                modified = s[:i] + c + s[i+1:]
-                if is_palindrome(modified):
+                modified_change = s[:i] + c + s[i+1:]
+                if is_palindrome(modified_change):
                     return True
         
         return False
@@ -55,7 +57,7 @@ def find_near_palindrome_pairs(strings):
     near_palindrome_pairs = []
     for i in range(len(strings)):
         for j in range(i+1, len(strings)):
-            # Both strings close to being palindromes but not already palindromes
+            # Check if both strings can become palindromes with a small change 
             if is_nearly_palindrome(strings[i]) and is_nearly_palindrome(strings[j]):
                 near_palindrome_pairs.append([strings[i], strings[j]])
     
