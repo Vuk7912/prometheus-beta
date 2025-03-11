@@ -20,8 +20,9 @@ def remove_duplicates(input_string):
     result = []
     
     for char in input_string:
-        if char not in seen:
-            seen.add(char)
+        lower_char = char.lower()
+        if lower_char not in seen:
+            seen.add(lower_char)
             result.append(char)
     
     return ''.join(result)
