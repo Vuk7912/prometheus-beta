@@ -17,20 +17,26 @@ def log_user_input(log_file='user_input.log', log_level=logging.INFO):
         ValueError: If input is empty or None.
         IOError: If there's an issue with file logging.
     """
-    # Ensure the directory exists
-    os.makedirs(os.path.dirname(log_file) or '.', exist_ok=True)
+    # Get the parent directory
+    log_dir = os.path.dirname(os.path.abspath(log_file))
+    os.makedirs(log_dir, exist_ok=True)
 
-    # Explicitly create the log file if it doesn't exist
-    open(log_file, 'a').close()
+    # Create a logger
+    logger = logging.getLogger('user_input_logger')
+    logger.setLevel(log_level)
 
-    # Configure logging
-    logging.basicConfig(
-        filename=log_file, 
-        level=log_level, 
-        format='%(asctime)s - %(levelname)s: %(message)s'
-    )
-
+    # Create file handler
     try:
+        file_handler = logging.FileHandler(log_file)
+        file_handler.setLevel(log_level)
+
+        # Create formatter
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s: %(message)s')
+        file_handler.setFormatter(formatter)
+
+        # Add handler to logger
+        logger.addHandler(file_handler)
+
         # Read input from command line
         user_input = input("Enter your input: ").strip()
 
@@ -39,7 +45,11 @@ def log_user_input(log_file='user_input.log', log_level=logging.INFO):
             raise ValueError("Input cannot be empty")
 
         # Log the input
-        logging.info(f"User input: {user_input}")
+        logger.info(f"User input: {user_input}")
+
+        # Remove handler to prevent duplicate logs
+        logger.removeHandler(file_handler)
+        file_handler.close()
 
         return user_input
 
