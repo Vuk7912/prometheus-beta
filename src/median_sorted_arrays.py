@@ -16,8 +16,15 @@ def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
         float: Median of the two sorted arrays
     
     Raises:
-        ValueError: If both input arrays are empty
+        ValueError: If both input arrays are empty or inputs are not sorted
     """
+    # Additional check for sorted inputs
+    def is_sorted(arr):
+        return all(arr[i] <= arr[i+1] for i in range(len(arr)-1)) if arr else True
+
+    if not is_sorted(nums1) or not is_sorted(nums2):
+        raise ValueError("Input arrays are not sorted or contain invalid data")
+
     # Ensure nums1 is the smaller array for optimization
     if len(nums1) > len(nums2):
         nums1, nums2 = nums2, nums1
