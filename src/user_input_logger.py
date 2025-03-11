@@ -1,5 +1,6 @@
 import logging
 import sys
+import os
 
 def log_user_input(log_file='user_input.log', log_level=logging.INFO):
     """
@@ -16,6 +17,9 @@ def log_user_input(log_file='user_input.log', log_level=logging.INFO):
         ValueError: If input is empty or None.
         IOError: If there's an issue with file logging.
     """
+    # Ensure the directory exists
+    os.makedirs(os.path.dirname(log_file), exist_ok=True)
+
     # Configure logging
     logging.basicConfig(
         filename=log_file, 
