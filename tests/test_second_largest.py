@@ -7,7 +7,7 @@ def test_normal_array():
 
 def test_array_with_duplicates():
     """Test an array with duplicate numbers."""
-    assert find_second_largest([1, 5, 5, 8, 3]) == 3
+    assert find_second_largest([1, 5, 5, 8, 3]) == 5
 
 def test_all_same_numbers():
     """Test an array with all same numbers."""
