@@ -18,7 +18,10 @@ def log_user_input(log_file='user_input.log', log_level=logging.INFO):
         IOError: If there's an issue with file logging.
     """
     # Ensure the directory exists
-    os.makedirs(os.path.dirname(log_file), exist_ok=True)
+    os.makedirs(os.path.dirname(log_file) or '.', exist_ok=True)
+
+    # Explicitly create the log file if it doesn't exist
+    open(log_file, 'a').close()
 
     # Configure logging
     logging.basicConfig(
