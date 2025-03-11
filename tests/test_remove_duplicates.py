@@ -11,7 +11,7 @@ def test_remove_duplicates_preserve_order():
 
 def test_remove_duplicates_mixed_case():
     """Test string with mixed case characters."""
-    assert remove_duplicates("HeLLo") == "Helo"
+    assert remove_duplicates("HeLLo") == "HeLo"
 
 def test_remove_duplicates_empty_string():
     """Test behavior with an empty string."""
