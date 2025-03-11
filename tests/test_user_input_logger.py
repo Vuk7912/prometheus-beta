@@ -17,6 +17,7 @@ def test_log_user_input_normal_case(tmp_path):
     assert result == "Hello, World!"
     
     # Verify log file contents
+    assert os.path.exists(log_file), f"Log file {log_file} was not created"
     with open(log_file, 'r') as f:
         log_content = f.read()
         assert "User input: Hello, World!" in log_content
@@ -48,6 +49,7 @@ def test_log_user_input_logging_level(tmp_path):
         result = user_input_logger.log_user_input(log_file, logging.DEBUG)
     
     # Verify log file contents
+    assert os.path.exists(log_file), f"Log file {log_file} was not created"
     with open(log_file, 'r') as f:
         log_content = f.read()
         assert "User input: Debug message" in log_content
