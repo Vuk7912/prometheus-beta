@@ -26,7 +26,7 @@ def find_second_largest(arr):
         raise ValueError("All elements must be numeric")
     
     # Remove duplicates and sort in descending order
-    unique_sorted = sorted(set(arr), reverse=True)
+    unique_nums = sorted(set(arr), reverse=True)
     
     # Return second largest if exists
-    return unique_sorted[1] if len(unique_sorted) > 1 else None
+    return unique_nums[1] if len(unique_nums) > 1 else None
