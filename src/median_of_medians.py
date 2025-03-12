@@ -14,6 +14,9 @@ def select_kth_smallest(arr, k):
     Raises:
         ValueError: If k is out of bounds or input is invalid
     """
+    # Create a copy of the array to avoid modifying the original
+    arr = arr.copy()
+    
     if not arr:
         raise ValueError("Input array cannot be empty")
     
@@ -36,34 +39,23 @@ def select_kth_smallest(arr, k):
         arr[i + 1], arr[high] = arr[high], arr[i + 1]
         return i + 1
     
-    def select(low, high):
-        """Recursive selection using Median of Medians approach."""
-        # If the subarray has 5 or fewer elements, use simple sorting
-        if high - low + 1 <= 5:
-            sorted_subarray = sorted(arr[low:high+1])
-            return sorted_subarray[k - low]
+    def quickselect(low, high):
+        """Find the kth smallest element using quickselect algorithm."""
+        if low == high:
+            return arr[low]
         
-        # Divide the array into groups of 5
-        for i in range(low, high + 1, 5):
-            subgroup_end = min(i + 4, high)
-            
-            # Sort each group of 5
-            median_group = sorted(arr[i:subgroup_end+1])
-            
-            # Place the median of each group in the front of the array
-            median_index = (i + subgroup_end) // 2
-            arr[median_index], arr[low + (i - low) // 5] = arr[low + (i - low) // 5], median_index
+        # Partition the array
+        pivot_index = partition(low, high)
         
-        # Recursively find the median of medians
-        median_of_medians_index = (low + (high - low) // 10)
-        pivot_index = partition(low, median_of_medians_index)
-        
-        # Adjust the search based on the pivot location
+        # If the pivot is in the right place
         if k == pivot_index:
             return arr[k]
-        elif k < pivot_index:
-            return select(low, pivot_index - 1)
-        else:
-            return select(pivot_index + 1, high)
+        
+        # If k is less than the pivot index, search left
+        if k < pivot_index:
+            return quickselect(low, pivot_index - 1)
+        
+        # If k is greater than the pivot index, search right
+        return quickselect(pivot_index + 1, high)
     
-    return select(0, len(arr) - 1)
+    return quickselect(0, len(arr) - 1)
