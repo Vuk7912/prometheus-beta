@@ -27,4 +27,4 @@ def test_first_non_repeating_character():
     # Test more complex scenarios
     assert first_non_repeating_character("abcdefghijklmnopqrstuvwxyz") == "a"
     assert first_non_repeating_character("abcabcabc") is None
-    assert first_non_repeating_character("abcdedcba") == "c"
+    assert first_non_repeating_character("abcdedcba") == "e"  # Updated to match actual behavior
