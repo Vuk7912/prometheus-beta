@@ -24,7 +24,7 @@ def first_non_repeating_character(s: str) -> str | None:
     for char in s:
         char_counts[char] = char_counts.get(char, 0) + 1
     
-    # Find the first character with count 1
+    # Find the first character with count 1 in order
     for char in s:
         if char_counts[char] == 1:
             return char
