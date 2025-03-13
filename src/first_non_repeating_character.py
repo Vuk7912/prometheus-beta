@@ -11,6 +11,10 @@ def first_non_repeating_character(s: str) -> str | None:
     Raises:
         ValueError: If the input contains characters other than lowercase letters.
     """
+    # Handle empty string
+    if not s:
+        return None
+    
     # Validate input 
     if not s.islower():
         raise ValueError("Input string must contain only lowercase letters")
