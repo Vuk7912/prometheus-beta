@@ -32,19 +32,22 @@ def max_non_adjacent_digit_sum(number):
     if len(digits) <= 1:
         return int(digits[0]) if digits else 0
     
+    # Initialize DP array
+    n = len(digits)
+    dp = [0] * n
+    
+    # First digit case
+    dp[0] = int(digits[0])
+    
+    # Second digit case
+    dp[1] = max(int(digits[0]), int(digits[1]))
+    
     # Dynamic programming to find max non-adjacent sum
-    # We'll use two variables to track max sums
-    include = int(digits[0])  # Max sum including current digit
-    exclude = 0  # Max sum excluding current digit
+    for i in range(2, n):
+        # Max of either:
+        # 1. Current digit + max sum up to two positions before
+        # 2. Max sum from previous position
+        dp[i] = max(int(digits[i]) + dp[i-2], dp[i-1])
     
-    for digit in digits[1:]:
-        # Store previous maximum sums
-        new_include = exclude + int(digit)
-        new_exclude = max(include, exclude)
-        
-        # Update for next iteration
-        include = new_include
-        exclude = new_exclude
-    
-    # Return the maximum of the final two possibilities
-    return max(include, exclude)
+    # Return the final max sum
+    return dp[-1]
