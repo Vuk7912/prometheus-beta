@@ -33,14 +33,8 @@ def generate_odd_sum_fibonacci(n):
     
     # Generate subsequent terms
     while len(sequence) < n:
-        # Use the last two terms to generate the next term
-        next_term = sequence[-1] + sequence[-2]
-        
-        # Ensure the sum of the last two terms is always odd
-        if (sequence[-1] + sequence[-2]) % 2 == 0:
-            # If sum is even, add 1 to the last term to make it odd
-            next_term = sequence[-1] + 1
-        
+        # Always add 1 to ensure odd sum
+        next_term = sequence[-1] + sequence[-2] + 1
         sequence.append(next_term)
     
     return sequence
