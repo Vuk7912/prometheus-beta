@@ -29,14 +29,14 @@ def find_first_occurrence(arr, target):
     
     # Binary search to find first occurrence
     left, right = 0, len(arr) - 1
-    result = -1
     
     while left <= right:
         mid = (left + right) // 2
         
         if arr[mid] == target:
             # Found a match, but continue searching left for first occurrence
-            result = mid
+            if mid == 0 or arr[mid-1] < target:
+                return mid
             right = mid - 1
         elif arr[mid] < target:
             # Target is in the right half
@@ -45,4 +45,4 @@ def find_first_occurrence(arr, target):
             # Target is in the left half
             right = mid - 1
     
-    return result
+    return -1
