@@ -28,12 +28,12 @@ def generate_odd_sum_fibonacci(n):
     if n == 2:
         return [0, 1]
     
-    # Initialize the sequence with first two terms
+    # Standard Fibonacci sequence
     sequence = [0, 1, 1, 2, 3]
     
     # Generate subsequent terms
     while len(sequence) < n:
-        # Next term is the sum of the previous two
+        # Add last two terms
         next_term = sequence[-1] + sequence[-2]
         sequence.append(next_term)
     
