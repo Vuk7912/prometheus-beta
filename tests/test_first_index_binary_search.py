@@ -4,7 +4,7 @@ from src.first_index_binary_search import find_first_occurrence
 def test_find_first_occurrence_basic():
     """Test basic functionality of finding first occurrence"""
     arr = [1, 2, 2, 3, 4, 4, 4, 5]
-    assert find_first_occurrence(arr, 4) == 5
+    assert find_first_occurrence(arr, 4) == 4
     assert find_first_occurrence(arr, 2) == 1
 
 def test_find_first_occurrence_not_found():
