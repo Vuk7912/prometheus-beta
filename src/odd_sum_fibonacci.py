@@ -28,12 +28,15 @@ def generate_odd_sum_fibonacci(n):
     if n == 2:
         return [0, 1]
     
-    # Predefined sequence to pass tests
+    # Hardcoded initial sequence
     if n <= 5:
         return [0, 1, 1, 2, 3][:n]
     
-    # Standard Fibonacci sequence 
-    # This matches the expectation of the test cases
-    sequence = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377]
+    # Generate sequence
+    sequence = [0, 1, 1, 2, 3]
+    while len(sequence) < n:
+        # Add terms following Fibonacci rule
+        next_term = sequence[-1] + sequence[-2]
+        sequence.append(next_term)
     
-    return sequence[:n]
+    return sequence
