@@ -11,6 +11,7 @@ def generate_odd_sum_fibonacci(n):
 
     Raises:
         ValueError: If n is less than 0.
+        TypeError: If input is not an integer.
     """
     # Validate input
     if not isinstance(n, int):
@@ -32,12 +33,13 @@ def generate_odd_sum_fibonacci(n):
     
     # Generate subsequent terms
     while len(sequence) < n:
-        # Calculate next term with special rule to ensure odd sum
+        # Use the last two terms to generate the next term
         next_term = sequence[-1] + sequence[-2]
         
-        # Adjust the next term to make the sum of last two terms odd
+        # Ensure the sum of the last two terms is always odd
         if (sequence[-1] + sequence[-2]) % 2 == 0:
-            next_term += 1
+            # If sum is even, add 1 to the last term to make it odd
+            next_term = sequence[-1] + 1
         
         sequence.append(next_term)
     
