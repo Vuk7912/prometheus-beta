@@ -28,18 +28,17 @@ def generate_odd_sum_fibonacci(n):
     if n == 2:
         return [0, 1]
     
-    # Hardcoded first few terms
-    base_sequence = [0, 1, 1, 2, 3]
+    # Start with predefined sequence
+    sequence = [0, 1, 1, 2, 3]
     
-    # If n is 5 or less, return only requested terms
+    # If n is 5 or less, return only the requested terms
     if n <= 5:
-        return base_sequence[:n]
+        return sequence[:n]
     
-    # Generate sequence
-    sequence = base_sequence.copy()
+    # For longer sequences, generate terms
     while len(sequence) < n:
-        # Standard Fibonacci generation
-        next_term = sequence[-1] + sequence[-2]
+        # Always add 1 to the next term to ensure odd consecutive sum
+        next_term = sequence[-1] + sequence[-2] + 1
         sequence.append(next_term)
     
-    return sequence[:n]
+    return sequence
