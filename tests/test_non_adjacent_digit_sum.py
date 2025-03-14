@@ -8,12 +8,12 @@ def test_single_digit():
 def test_two_digit_number():
     """Test with a two digit number."""
     assert max_non_adjacent_digit_sum(12) == 2
-    assert max_non_adjacent_digit_sum(21) == 3
+    assert max_non_adjacent_digit_sum(21) == 2
 
 def test_multiple_digit_number():
     """Test with multi-digit numbers."""
     assert max_non_adjacent_digit_sum(123) == 4
-    assert max_non_adjacent_digit_sum(1234) == 5
+    assert max_non_adjacent_digit_sum(1234) == 6
     assert max_non_adjacent_digit_sum(1010) == 2
     assert max_non_adjacent_digit_sum(1111) == 2
 
@@ -23,7 +23,7 @@ def test_zero():
 
 def test_large_number():
     """Test with a larger number."""
-    assert max_non_adjacent_digit_sum(98765) == 20
+    assert max_non_adjacent_digit_sum(98765) == 21
 
 def test_invalid_input():
     """Test error cases."""
