@@ -1,0 +1,36 @@
+import pytest
+from src.leap_year import is_leap_year
+
+def test_standard_leap_years():
+    """Test typical leap years divisible by 4"""
+    assert is_leap_year(2020) == True
+    assert is_leap_year(2024) == True
+    assert is_leap_year(2000) == True
+
+def test_non_leap_years():
+    """Test years that are not leap years"""
+    assert is_leap_year(2100) == False
+    assert is_leap_year(2022) == False
+    assert is_leap_year(2023) == False
+
+def test_century_years():
+    """Test century years with special leap year rules"""
+    assert is_leap_year(1900) == False  # Not divisible by 400
+    assert is_leap_year(2000) == True   # Divisible by 400
+    assert is_leap_year(2400) == True   # Divisible by 400
+
+def test_invalid_input_types():
+    """Test error handling for invalid input types"""
+    with pytest.raises(TypeError):
+        is_leap_year("2020")
+    with pytest.raises(TypeError):
+        is_leap_year(2020.5)
+    with pytest.raises(TypeError):
+        is_leap_year(None)
+
+def test_invalid_year_values():
+    """Test error handling for invalid year values"""
+    with pytest.raises(ValueError):
+        is_leap_year(0)
+    with pytest.raises(ValueError):
+        is_leap_year(-2020)
