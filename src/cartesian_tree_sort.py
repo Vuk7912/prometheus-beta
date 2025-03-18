@@ -25,31 +25,19 @@ def build_cartesian_tree(arr):
     if not arr:
         return None
     
-    # Use explicit creation approach
-    nodes = [Node(x) for x in arr]
+    # Find the minimum element
+    min_index = arr.index(min(arr))
     
-    # First node is always the root
-    root = nodes[0]
+    # Create root node with the minimum element
+    root = Node(arr[min_index])
     
-    # Track the last node processed
-    last = root
+    # Build left subtree if needed
+    if min_index > 0:
+        root.left = build_cartesian_tree(arr[:min_index])
     
-    # Build tree level by level
-    for node in nodes[1:]:
-        # If current node is less than previous, make it the right child
-        while last.value > node.value:
-            # If no left child exists, make node the left child
-            if not last.left:
-                last.left = node
-                break
-            # Otherwise, go up the tree
-            last = last.parent if hasattr(last, 'parent') else last
-        
-        # Connect node to its parent
-        node.parent = last
-        
-        # Update last processed node
-        last = node
+    # Build right subtree if needed
+    if min_index < len(arr) - 1:
+        root.right = build_cartesian_tree(arr[min_index+1:])
     
     return root
 
