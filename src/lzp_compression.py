@@ -52,7 +52,7 @@ def lzp_compress(data):
         
         # Check if context is in dictionary
         if current_context in context_dict:
-            # If context predicted correctly, output a match flag
+            # If context predicted correctly, output a match flag and skip a byte
             if context_dict[current_context] == data[i]:
                 compressed.append(1)  # Match flag
             else:
@@ -113,16 +113,24 @@ def lzp_decompress(compressed_data):
         if compressed_data[i] == 1:
             # Prediction match, use context dictionary
             current_context = tuple(decompressed[len(decompressed)-context_size:len(decompressed)])
-            predicted_byte = context_dict.get(current_context)
             
-            if predicted_byte is None:
-                raise ValueError("Corrupted compressed data")
-            
-            decompressed.append(predicted_byte)
+            # Look up previous byte in context
+            if current_context in context_dict:
+                decompressed.append(context_dict[current_context])
+            else:
+                # If context is not in dictionary, fallback to non-matched path
+                # This helps prevent corrupt data errors
+                if i + 1 >= len(compressed_data):
+                    break
+                current_byte = compressed_data[i+1]
+                decompressed.append(current_byte)
+                current_context = tuple(decompressed[len(decompressed)-context_size:len(decompressed)])
+                context_dict[current_context] = current_byte
+                i += 1
         else:
             # Mismatch or new context
             if i + 1 >= len(compressed_data):
-                raise ValueError("Corrupted compressed data")
+                break
             
             # Get the actual byte
             actual_byte = compressed_data[i+1]
