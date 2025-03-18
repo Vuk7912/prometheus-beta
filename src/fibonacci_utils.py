@@ -22,7 +22,10 @@ def fibonacci(max_num):
     
     # Generate Fibonacci sequence
     fib_seq = [1, 1]
-    while True:
+    while fib_seq[-1] <= max_num:
+        # Only add next number if it's less than or equal to max_num
+        if fib_seq[-1] == max_num:
+            break
         next_num = fib_seq[-1] + fib_seq[-2]
         if next_num > max_num:
             break
