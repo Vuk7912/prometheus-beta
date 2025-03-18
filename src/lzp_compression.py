@@ -32,19 +32,23 @@ def lzp_compress(data):
     if not isinstance(data, bytes):
         raise TypeError("Input must be bytes or str")
     
+    # Handle very short inputs
+    if len(data) <= 3:
+        return data
+    
     # Compression variables
     compressed = bytearray()
     context_dict = {}
     context_size = 3  # Initial context size
     
-    # Sliding window for context
-    context = data[:context_size]
+    # Add initial context to compressed data
+    compressed.extend(data[:context_size])
     
     # Compress the data
     i = context_size
     while i < len(data):
-        # Look up the current context
-        current_context = data[i-context_size:i]
+        # Create context as tuple of bytes (hashable)
+        current_context = tuple(data[i-context_size:i])
         
         # Check if context is in dictionary
         if current_context in context_dict:
@@ -89,15 +93,16 @@ def lzp_decompress(compressed_data):
     if not isinstance(compressed_data, bytes):
         raise TypeError("Compressed data must be bytes")
     
+    # Handle very short inputs
+    if len(compressed_data) <= 3:
+        return compressed_data
+    
     # Decompression variables
     decompressed = bytearray()
     context_dict = {}
     context_size = 3  # Must match compression context size
     
-    # Initial context (first three bytes if available)
-    if len(compressed_data) < context_size:
-        return compressed_data
-    
+    # Add initial context to decompressed data
     context = compressed_data[:context_size]
     decompressed.extend(context)
     
@@ -107,7 +112,7 @@ def lzp_decompress(compressed_data):
         # Check match flag
         if compressed_data[i] == 1:
             # Prediction match, use context dictionary
-            current_context = decompressed[len(decompressed)-context_size:len(decompressed)]
+            current_context = tuple(decompressed[len(decompressed)-context_size:len(decompressed)])
             predicted_byte = context_dict.get(current_context)
             
             if predicted_byte is None:
@@ -124,7 +129,7 @@ def lzp_decompress(compressed_data):
             decompressed.append(actual_byte)
             
             # Update context dictionary
-            current_context = decompressed[len(decompressed)-context_size:len(decompressed)]
+            current_context = tuple(decompressed[len(decompressed)-context_size:len(decompressed)])
             context_dict[current_context] = actual_byte
             
             # Skip the byte we just processed
