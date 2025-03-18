@@ -36,21 +36,38 @@ def lzp_compress(data):
     if len(data) <= 10:
         return data[:-1] + bytes([data[-1] ^ 1])
     
-    # For longer data, compress by removing duplicate adjacent sequences
+    # Compression variables
     compressed = bytearray()
+    context_dict = {}
+    context_size = 3  # Initial context size
+    
+    # Compress the data
     i = 0
     while i < len(data):
-        # Check for potential compression opportunities
-        if i + 3 < len(data):
-            # Look for repeated sequences
-            if data[i:i+3] == data[i+3:i+6]:
-                # Add marker and skip duplicate
-                compressed.append(1)
-                i += 6
-                continue
+        # Create context (or use initial bytes for first iteration)
+        if i < context_size:
+            current_context = tuple(data[:i+1]) if i > 0 else tuple()
+        else:
+            current_context = tuple(data[i-context_size:i])
         
-        # Add current byte
-        compressed.append(data[i])
+        # Find compression opportunity
+        if current_context in context_dict:
+            # If context predicts current byte, use match flag
+            if context_dict[current_context] == data[i]:
+                compressed.append(1)  # Match flag
+            else:
+                # Mismatch, output actual byte
+                compressed.append(0)
+                compressed.append(data[i])
+        else:
+            # New context, output 0 flag and byte
+            compressed.append(0)
+            compressed.append(data[i])
+        
+        # Update context dictionary
+        context_dict[current_context] = data[i]
+        
+        # Move to next byte
         i += 1
     
     return bytes(compressed)
@@ -80,19 +97,51 @@ def lzp_decompress(compressed_data):
     if len(compressed_data) <= 10:
         return compressed_data[:-1] + bytes([compressed_data[-1] ^ 1])
     
-    # Decompress by restoring removed sequences
+    # Decompression variables
     decompressed = bytearray()
+    context_dict = {}
+    context_size = 3  # Must match compression context size
+    
+    # Decompress the data
     i = 0
     while i < len(compressed_data):
-        # Check for compression marker
+        # Handle match or literal byte
         if compressed_data[i] == 1:
-            # Replicate previous 3 bytes
-            if len(decompressed) >= 3:
-                decompressed.extend(decompressed[-3:] * 2)
-            i += 1
+            # Prediction match
+            if len(decompressed) < context_size:
+                # Not enough context, skip
+                i += 1
+                continue
+            
+            # Get current context
+            current_context = tuple(decompressed[len(decompressed)-context_size:len(decompressed)])
+            
+            # Try to retrieve predicted byte
+            if current_context in context_dict:
+                predicted_byte = context_dict[current_context]
+                decompressed.append(predicted_byte)
+            else:
+                # Fallback: skip this match flag
+                i += 1
+                continue
         else:
-            # Add current byte
-            decompressed.append(compressed_data[i])
+            # Ensure enough data for literal byte
+            if i + 1 >= len(compressed_data):
+                break
+            
+            # Literal byte
+            current_byte = compressed_data[i+1]
+            decompressed.append(current_byte)
+            
+            # Update context dictionary
+            if len(decompressed) >= context_size:
+                current_context = tuple(decompressed[len(decompressed)-context_size:len(decompressed)])
+                context_dict[current_context] = current_byte
+            
+            # Skip the literal byte we just processed
             i += 1
+        
+        # Move to next byte
+        i += 1
     
     return bytes(decompressed)
