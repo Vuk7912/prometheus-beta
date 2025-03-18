@@ -38,7 +38,7 @@ def test_replace_with_empty_new_string(sample_file):
     assert replacements == 2
     with open(sample_file, 'r') as file:
         content = file.read()
-    assert content == "worldhiuniverse"
+    assert content == "world universe"
 
 def test_error_non_existent_file():
     """Test error handling for non-existent file."""
