@@ -45,6 +45,8 @@ def to_sponge_case(text):
             should_uppercase = not should_uppercase
         else:
             # Preserve non-alphabetic characters as-is
+            # Reset case alternation after non-alphabetic characters
             result.append(char)
+            should_uppercase = True
     
     return ''.join(result)
