@@ -3,7 +3,7 @@ class Node:
     Node class for Cartesian Tree representation.
     
     Attributes:
-        value (int or float): The value stored in the node
+        value (comparable): The value stored in the node
         left (Node): Left child node
         right (Node): Right child node
     """
@@ -29,26 +29,25 @@ def build_cartesian_tree(arr):
     if not arr:
         return None
     
-    # Create a stack to help build the tree
-    stack = []
+    # Handle simple cases
+    if len(arr) == 1:
+        return Node(arr[0])
     
-    for value in arr:
-        # Remove nodes from stack that are larger than current value
-        while stack and stack[-1].value > value:
-            last = stack.pop()
-        
-        # Create current node
-        node = Node(value)
-        
-        # If stack is not empty, connect current node
-        if stack:
-            stack[-1].right = node
-        
-        # Add current node to stack
-        stack.append(node)
+    # Find the minimum element and its index
+    min_value = min(arr)
+    min_index = arr.index(min_value)
     
-    # Return the root (first node in stack)
-    return stack[0]
+    # Create root with the minimum element
+    root = Node(min_value)
+    
+    # Recursively build left and right subtrees
+    if min_index > 0:
+        root.left = build_cartesian_tree(arr[:min_index])
+    
+    if min_index < len(arr) - 1:
+        root.right = build_cartesian_tree(arr[min_index+1:])
+    
+    return root
 
 def cartesian_tree_sort(arr):
     """
@@ -78,27 +77,33 @@ def cartesian_tree_sort(arr):
     # Create a copy to avoid modifying the original list
     input_arr = arr.copy()
     
-    # Build Cartesian Tree
-    root = build_cartesian_tree(input_arr)
-    
-    # Sorted output list
+    # Perform sorting
     sorted_arr = []
     
-    def in_order_traversal(node):
+    def recursive_sort(sublist):
         """
-        Perform in-order traversal to extract sorted elements.
+        Recursively sort sublists using Cartesian Tree
         
         Args:
-            node (Node): Current node in the Cartesian Tree
+            sublist (list): Sublist to be sorted
         """
-        if node is None:
-            return
+        if len(sublist) <= 1:
+            return sublist
         
-        in_order_traversal(node.left)
-        sorted_arr.append(node.value)
-        in_order_traversal(node.right)
+        # Build Cartesian Tree and traverse
+        root = build_cartesian_tree(sublist)
+        
+        def in_order_traversal(node):
+            if node is None:
+                return
+            
+            in_order_traversal(node.left)
+            sorted_arr.append(node.value)
+            in_order_traversal(node.right)
+        
+        in_order_traversal(root)
     
-    # Traverse and sort
-    in_order_traversal(root)
+    # Sort the entire input array
+    recursive_sort(input_arr)
     
     return sorted_arr
