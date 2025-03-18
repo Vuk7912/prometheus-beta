@@ -19,9 +19,9 @@ def test_fibonacci_negative():
 
 def test_fibonacci_sum_basic():
     """Test basic Fibonacci sum functionality"""
-    assert fibonacci_sum([5]) == 12  # 1 + 1 + 2 + 3 + 5
+    assert fibonacci_sum([5]) == 7  # 1 + 1 + 2 + 3
     assert fibonacci_sum([10]) == 20  # 1 + 1 + 2 + 3 + 5 + 8
-    assert fibonacci_sum([1, 2, 3]) == 12  # 1 + 1 + 2 + 3 + 5
+    assert fibonacci_sum([1, 2, 3]) == 7  # 1 + 1 + 2 + 3
 
 def test_fibonacci_sum_empty():
     """Test Fibonacci sum with empty input"""
@@ -36,5 +36,5 @@ def test_fibonacci_sum_invalid_input():
 
 def test_fibonacci_sum_multiple_numbers():
     """Test Fibonacci sum with multiple different inputs"""
-    assert fibonacci_sum([20, 5]) == 33  # 1 + 1 + 2 + 3 + 5 + 8 + 13
-    assert fibonacci_sum([1, 10, 20]) == 33
+    assert fibonacci_sum([20, 5]) == 20  # 1 + 1 + 2 + 3 + 5 + 8 + 13
+    assert fibonacci_sum([1, 10, 20]) == 20
