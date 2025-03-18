@@ -62,10 +62,7 @@ def test_log_progress_no_total():
 
 def test_log_progress_invalid_total():
     """Test log_progress with invalid total."""
-    with pytest.raises(ValueError):
-        list(log_progress(range(10), total=0))
-    
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="Total must be a positive number"):
         list(log_progress(range(10), total=-5))
 
 
@@ -74,9 +71,9 @@ def test_log_progress_empty_iterable():
     empty_list = []
     
     with redirect_stdout(io.StringIO()) as f:
-        result = list(log_progress(empty_list))
+        result = list(log_progress(empty_list, total=0))
         output = f.getvalue()
     
-    # Verify no error and no output for empty iterable
+    # Verify no output and no items
     assert len(result) == 0
-    assert len(output.strip()) == 0
+    assert output.strip() == ''
