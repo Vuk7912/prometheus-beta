@@ -33,9 +33,12 @@ def log_progress(iterable, total=None, prefix='Progress:', suffix='Complete',
     if total is None:
         total = len(iterable)
 
-    # Handle empty iterables or zero total
-    if total <= 0:
-        print(f'\r{prefix} |{"-" * length}| 0.0% {suffix}')
+    # Validate total
+    if total < 0:
+        raise ValueError("Total must be a positive number")
+
+    # Handle empty iterable or zero total
+    if total == 0:
         return
 
     # Prepare iteration variables
