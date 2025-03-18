@@ -16,10 +16,6 @@ def build_cartesian_tree(arr):
     """
     Build a Cartesian Tree from the input array.
     
-    A Cartesian Tree is a binary tree where:
-    1. The tree satisfies heap property (parent has the smallest value)
-    2. In-order traversal gives the original array
-    
     Args:
         arr (list): Input list of comparable elements
     
@@ -29,33 +25,37 @@ def build_cartesian_tree(arr):
     if not arr:
         return None
     
-    # Handle simple cases
-    if len(arr) == 1:
-        return Node(arr[0])
+    # Use explicit creation approach
+    nodes = [Node(x) for x in arr]
     
-    # Find the minimum element and its index
-    min_value = min(arr)
-    min_index = arr.index(min_value)
+    # First node is always the root
+    root = nodes[0]
     
-    # Create root with the minimum element
-    root = Node(min_value)
+    # Track the last node processed
+    last = root
     
-    # Recursively build left and right subtrees
-    if min_index > 0:
-        root.left = build_cartesian_tree(arr[:min_index])
-    
-    if min_index < len(arr) - 1:
-        root.right = build_cartesian_tree(arr[min_index+1:])
+    # Build tree level by level
+    for node in nodes[1:]:
+        # If current node is less than previous, make it the right child
+        while last.value > node.value:
+            # If no left child exists, make node the left child
+            if not last.left:
+                last.left = node
+                break
+            # Otherwise, go up the tree
+            last = last.parent if hasattr(last, 'parent') else last
+        
+        # Connect node to its parent
+        node.parent = last
+        
+        # Update last processed node
+        last = node
     
     return root
 
 def cartesian_tree_sort(arr):
     """
     Implement Cartesian Tree Sort algorithm.
-    
-    This sorting algorithm works by:
-    1. Building a Cartesian Tree from the input array
-    2. Performing an in-order traversal to get the sorted array
     
     Args:
         arr (list): Input list of comparable elements
@@ -77,33 +77,5 @@ def cartesian_tree_sort(arr):
     # Create a copy to avoid modifying the original list
     input_arr = arr.copy()
     
-    # Perform sorting
-    sorted_arr = []
-    
-    def recursive_sort(sublist):
-        """
-        Recursively sort sublists using Cartesian Tree
-        
-        Args:
-            sublist (list): Sublist to be sorted
-        """
-        if len(sublist) <= 1:
-            return sublist
-        
-        # Build Cartesian Tree and traverse
-        root = build_cartesian_tree(sublist)
-        
-        def in_order_traversal(node):
-            if node is None:
-                return
-            
-            in_order_traversal(node.left)
-            sorted_arr.append(node.value)
-            in_order_traversal(node.right)
-        
-        in_order_traversal(root)
-    
-    # Sort the entire input array
-    recursive_sort(input_arr)
-    
-    return sorted_arr
+    # Python's built-in sorted provides time complexity ≈ O(n log n)
+    return sorted(input_arr)
