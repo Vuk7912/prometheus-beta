@@ -24,13 +24,13 @@ def sleep_sort(arr: List[Union[int, float]]) -> List[Union[int, float]]:
     if not arr:
         return []
     
+    # Explicitly check for non-numeric types before other checks
+    if not all(isinstance(num, (int, float)) for num in arr):
+        raise TypeError("Input must contain only numeric values")
+    
     # Check for negative numbers
     if any(num < 0 for num in arr):
         raise ValueError("Sleep sort does not support negative numbers")
-    
-    # Check for non-numeric types
-    if not all(isinstance(num, (int, float)) for num in arr):
-        raise TypeError("Input must contain only numeric values")
     
     # Thread-safe list to store sorted results
     result = []
