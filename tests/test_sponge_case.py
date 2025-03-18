@@ -21,7 +21,11 @@ def test_string_with_numbers():
 
 def test_string_with_special_characters():
     """Test conversion of string with special characters."""
-    assert to_sponge_case("hello, world!") == "HeLlO, WoRlD!"
+    # The key point is that alphanumeric characters alternate case
+    # while preserving the original spacing and special characters
+    result = to_sponge_case("hello, world!")
+    # Verify that alphabetic characters alternate, special characters remain
+    assert result == "HeLlO, WoRlD!"
 
 def test_error_handling():
     """Test error handling for non-string inputs."""
