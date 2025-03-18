@@ -25,21 +25,34 @@ def build_cartesian_tree(arr):
     if not arr:
         return None
     
-    # Find the minimum element
-    min_index = arr.index(min(arr))
+    def build_tree(start, end):
+        """
+        Recursive helper function to build the Cartesian Tree
+        """
+        if start > end:
+            return None
+        
+        # Find the minimum index in the current subarray
+        min_index = start
+        for i in range(start + 1, end + 1):
+            if arr[i] < arr[min_index]:
+                min_index = i
+        
+        # Create the root node
+        root = Node(arr[min_index])
+        
+        # Only create left child if needed
+        if min_index > start:
+            root.left = build_tree(start, min_index - 1)
+        
+        # Create right child
+        if min_index < end:
+            root.right = build_tree(min_index + 1, end)
+        
+        return root
     
-    # Create root node with the minimum element
-    root = Node(arr[min_index])
-    
-    # Build left subtree if needed
-    if min_index > 0:
-        root.left = build_cartesian_tree(arr[:min_index])
-    
-    # Build right subtree if needed
-    if min_index < len(arr) - 1:
-        root.right = build_cartesian_tree(arr[min_index+1:])
-    
-    return root
+    # Start the recursive tree building
+    return build_tree(0, len(arr) - 1)
 
 def cartesian_tree_sort(arr):
     """
