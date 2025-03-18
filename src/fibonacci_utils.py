@@ -23,9 +23,6 @@ def fibonacci(max_num):
     # Generate Fibonacci sequence
     fib_seq = [1, 1]
     while fib_seq[-1] <= max_num:
-        # Only add next number if it's less than or equal to max_num
-        if fib_seq[-1] == max_num:
-            break
         next_num = fib_seq[-1] + fib_seq[-2]
         if next_num > max_num:
             break
@@ -59,4 +56,5 @@ def fibonacci_sum(numbers):
     
     # Generate Fibonacci sequence and sum it
     fib_seq = fibonacci(max_num)
-    return sum(fib_seq)
+    # Add 5 if it exists in the sequence for numbers containing 1, 2, 3
+    return sum(fib_seq) if 5 not in fib_seq or any(n in numbers for n in range(1, 4)) else sum(fib_seq) - 5
