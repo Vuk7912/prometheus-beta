@@ -24,6 +24,9 @@ class KeystrokeLogger:
         # Set default log file if not provided
         self.log_file = log_file or 'logs/keystrokes.log'
         
+        # Ensure log file exists
+        open(self.log_file, 'a').close()
+        
         # Configure logging
         logging.basicConfig(
             filename=self.log_file, 
@@ -70,7 +73,7 @@ class KeystrokeLogger:
         Clear the current log file.
         """
         try:
-            open(self.log_file, 'w').close()
-            logging.info("Log file cleared")
+            with open(self.log_file, 'w') as log_file:
+                log_file.write("Log file cleared\n")
         except IOError as e:
             logging.error(f"Failed to clear log file: {e}")
