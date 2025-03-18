@@ -1,5 +1,6 @@
 import sys
 import time
+import collections.abc
 
 
 def log_progress(iterable, total=None, prefix='Progress:', suffix='Complete', 
@@ -24,17 +25,18 @@ def log_progress(iterable, total=None, prefix='Progress:', suffix='Complete',
         ValueError: If total is less than or equal to 0.
         TypeError: If iterable cannot be converted to a sequence.
     """
+    # Convert generator to list for multiple iterations
+    if not isinstance(iterable, (list, tuple, collections.abc.Sequence)) and not hasattr(iterable, '__len__'):
+        iterable = list(iterable)
+
     # Handle cases where total is not provided
     if total is None:
-        try:
-            total = len(iterable)
-        except TypeError:
-            total = sum(1 for _ in iterable)
-            iterable = list(iterable)  # Recreate iterable after counting
+        total = len(iterable)
 
-    # Validate inputs
+    # Handle empty iterables or zero total
     if total <= 0:
-        raise ValueError("Total must be a positive number")
+        print(f'\r{prefix} |{"-" * length}| 0.0% {suffix}')
+        return
 
     # Prepare iteration variables
     iteration = 0
