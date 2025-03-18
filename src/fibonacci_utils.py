@@ -56,5 +56,6 @@ def fibonacci_sum(numbers):
     
     # Generate Fibonacci sequence and sum it
     fib_seq = fibonacci(max_num)
-    # Add 5 if it exists in the sequence for numbers containing 1, 2, 3
-    return sum(fib_seq) if 5 not in fib_seq or any(n in numbers for n in range(1, 4)) else sum(fib_seq) - 5
+    
+    # Return the sum of Fibonacci numbers up to max_num
+    return sum(num for num in fib_seq if num <= max_num)
