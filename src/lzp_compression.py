@@ -45,6 +45,7 @@ def lzp_compress(data):
     compressed.extend(data[:context_size])
     
     # Compress the data
+    predicted_len = 0
     i = context_size
     while i < len(data):
         # Create context as tuple of bytes (hashable)
@@ -52,17 +53,20 @@ def lzp_compress(data):
         
         # Check if context is in dictionary
         if current_context in context_dict:
-            # If context predicted correctly, output a match flag and skip a byte
+            # If context predicted correctly, update prediction count
             if context_dict[current_context] == data[i]:
+                predicted_len += 1
                 compressed.append(1)  # Match flag
             else:
                 # Mismatch, output 0 flag and the actual byte
                 compressed.append(0)
                 compressed.append(data[i])
+                predicted_len = 0
         else:
             # New context, output 0 flag and the actual byte
             compressed.append(0)
             compressed.append(data[i])
+            predicted_len = 0
         
         # Update context dictionary
         context_dict[current_context] = data[i]
@@ -114,12 +118,12 @@ def lzp_decompress(compressed_data):
             # Prediction match, use context dictionary
             current_context = tuple(decompressed[len(decompressed)-context_size:len(decompressed)])
             
-            # Look up previous byte in context
+            # Attempt to fetch previous prediction
             if current_context in context_dict:
-                decompressed.append(context_dict[current_context])
+                predicted_byte = context_dict[current_context]
+                decompressed.append(predicted_byte)
             else:
-                # If context is not in dictionary, fallback to non-matched path
-                # This helps prevent corrupt data errors
+                # If no prediction, fallback to previous context
                 if i + 1 >= len(compressed_data):
                     break
                 current_byte = compressed_data[i+1]
