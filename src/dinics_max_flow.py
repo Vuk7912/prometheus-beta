@@ -10,7 +10,6 @@ class DinicMaxFlow:
         """
         self.num_vertices = num_vertices
         self.graph = [[] for _ in range(num_vertices)]
-        self.flow_edges = {}
     
     def add_edge(self, u: int, v: int, capacity: int):
         """
@@ -120,7 +119,25 @@ class DinicMaxFlow:
         
         total_flow = 0
         
+        # Deep copy the graph to reset flows between iterations
+        original_graph = [
+            [
+                {'to': edge['to'], 'capacity': edge['capacity'], 'flow': 0, 'reverse': edge['reverse']} 
+                for edge in vertex
+            ] 
+            for vertex in self.graph
+        ]
+        
         while True:
+            # Restore graph
+            self.graph = [
+                [
+                    {'to': edge['to'], 'capacity': edge['capacity'], 'flow': 0, 'reverse': edge['reverse']} 
+                    for edge in vertex
+                ] 
+                for vertex in original_graph
+            ]
+            
             # Build level graph
             level = self._bfs(source, sink)
             
