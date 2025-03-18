@@ -33,11 +33,18 @@ def to_sponge_case(text):
     
     # Convert to sponge case
     result = []
-    for i, char in enumerate(text):
-        # Alternate case based on index, starting with uppercase
-        if i % 2 == 0:
-            result.append(char.upper())
+    should_uppercase = True
+    
+    for char in text:
+        if char.isalpha():
+            # Alternate case for alphabetic characters
+            if should_uppercase:
+                result.append(char.upper())
+            else:
+                result.append(char.lower())
+            should_uppercase = not should_uppercase
         else:
-            result.append(char.lower())
+            # Preserve non-alphabetic characters as-is
+            result.append(char)
     
     return ''.join(result)
