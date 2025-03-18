@@ -3,7 +3,7 @@ class Node:
     Node class for Cartesian Tree representation.
     
     Attributes:
-        value (int): The value stored in the node
+        value (int or float): The value stored in the node
         left (Node): Left child node
         right (Node): Right child node
     """
@@ -17,8 +17,8 @@ def build_cartesian_tree(arr):
     Build a Cartesian Tree from the input array.
     
     A Cartesian Tree is a binary tree where:
-    1. The tree is heap-ordered (parent is smaller than children)
-    2. An in-order traversal yields the original array
+    1. The tree satisfies heap property (parent has the smallest value)
+    2. In-order traversal gives the original array
     
     Args:
         arr (list): Input list of comparable elements
@@ -29,24 +29,26 @@ def build_cartesian_tree(arr):
     if not arr:
         return None
     
-    # Handle empty or single-element arrays
-    if len(arr) == 1:
-        return Node(arr[0])
+    # Create a stack to help build the tree
+    stack = []
     
-    # Find the index of the minimum element
-    min_index = arr.index(min(arr))
+    for value in arr:
+        # Remove nodes from stack that are larger than current value
+        while stack and stack[-1].value > value:
+            last = stack.pop()
+        
+        # Create current node
+        node = Node(value)
+        
+        # If stack is not empty, connect current node
+        if stack:
+            stack[-1].right = node
+        
+        # Add current node to stack
+        stack.append(node)
     
-    # Create root node with the minimum element
-    root = Node(arr[min_index])
-    
-    # Recursively build left and right subtrees
-    if min_index > 0:
-        root.left = build_cartesian_tree(arr[:min_index])
-    
-    if min_index < len(arr) - 1:
-        root.right = build_cartesian_tree(arr[min_index+1:])
-    
-    return root
+    # Return the root (first node in stack)
+    return stack[0]
 
 def cartesian_tree_sort(arr):
     """
@@ -64,7 +66,6 @@ def cartesian_tree_sort(arr):
     
     Raises:
         TypeError: If input is not a list
-        TypeError: If list contains elements that cannot be compared
     """
     # Type checking
     if not isinstance(arr, list):
