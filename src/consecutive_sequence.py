@@ -13,6 +13,8 @@ def find_longest_consecutive_sequence(nums):
         [1, 2, 3, 4]
         >>> find_longest_consecutive_sequence([0, 3, 7, 2, 5, 8, 4, 6, 0, 1])
         [0, 1, 2, 3, 4, 5, 6, 7, 8]
+        >>> find_longest_consecutive_sequence([5, 10, 15, 20])
+        [5]
     """
     # Handle empty list or None input
     if not nums:
