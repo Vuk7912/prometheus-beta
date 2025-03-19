@@ -34,16 +34,14 @@ def sum_pairs_with_diff_nine(file_path):
     counted_pairs = set()
     
     for num in set(numbers):
-        # Check pairs in both directions
+        # Pairs in both a+9=b and b+9=a order
         if num + 9 in number_counts:
-            # Handle case with same number (must occur at least twice)
-            if num + 9 == num:
-                if number_counts[num] >= 2:
-                    # Pair must use different instances
-                    pair_sum += 2 * (num + (num + 9))
-            else:
-                # Different numbers can be used multiple times based on their counts
-                min_count = min(number_counts[num], number_counts[num + 9])
-                pair_sum += min_count * (num + (num + 9))
+            # Avoid double-counting pairs
+            pair = tuple(sorted((num, num + 9)))
+            if pair not in counted_pairs:
+                # Count pairs, carefully handling duplicate numbers
+                count = min(number_counts[num], number_counts[num + 9])
+                pair_sum += count * (pair[0] + pair[1])
+                counted_pairs.add(pair)
     
-    return pair_sum // 2
+    return pair_sum
