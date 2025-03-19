@@ -17,9 +17,8 @@ def sum_of_multiples(min: int, max: int) -> int:
         raise ValueError("Minimum value must be less than or equal to maximum value")
 
     # Ensure we only count numbers exactly divisible by 2 or 3
-    start = max(1, min)  # Start from 1 or the min value, whichever is larger
     multiples_sum = sum(
-        num for num in range(start, max + 1) 
+        num for num in range(max(1, min), max + 1) 
         if num % 2 == 0 or num % 3 == 0
     )
 
