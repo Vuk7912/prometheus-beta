@@ -36,11 +36,10 @@ def rotate_and_reverse(string: str, rotations: int) -> str:
     # Normalize rotations to be within string length
     effective_rotations = rotations % len(string)
     
-    # Reverse first, then rotate
+    # Reverse first
     reversed_string = string[::-1]
     
     # Rotate the reversed string
-    result = reversed_string[len(reversed_string)-effective_rotations:] + \
-             reversed_string[:len(reversed_string)-effective_rotations]
+    rotated = reversed_string[effective_rotations:] + reversed_string[:effective_rotations]
     
-    return result
+    return rotated
