@@ -25,7 +25,7 @@ def find_longest_consecutive_sequence(nums):
     
     longest_sequence = []
     
-    for num in num_set:
+    for num in sorted(num_set):
         # Only start sequences from the smallest number in the sequence
         if num - 1 not in num_set:
             current_num = num
@@ -40,5 +40,5 @@ def find_longest_consecutive_sequence(nums):
             if len(current_sequence) > len(longest_sequence):
                 longest_sequence = current_sequence
     
-    # If no consecutive sequence found, return the first element
+    # If no consecutive sequence found, return the first element of the sorted list
     return longest_sequence if longest_sequence else [nums[0]]
