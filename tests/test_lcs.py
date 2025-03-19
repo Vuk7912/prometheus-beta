@@ -15,7 +15,8 @@ def test_empty_strings():
 def test_identical_strings():
     """Test when strings are identical"""
     assert longest_common_subsequence("HELLO", "HELLO") == "HELLO"
-    assert longest_common_subsequence("Hello", "Hello") == ""
+    assert longest_common_subsequence("Hello", "Hello") == "Hello"
+    assert longest_common_subsequence("HELLO", "hello") == ""
 
 def test_no_common_subsequence():
     """Test when there's no common subsequence"""
@@ -24,7 +25,7 @@ def test_no_common_subsequence():
 def test_case_sensitivity():
     """Test case sensitivity"""
     assert longest_common_subsequence("Hello", "hello") == ""
-    assert longest_common_subsequence("HELLO", "hello") == "HELLO"
+    assert longest_common_subsequence("HELLO", "HELLO") == "HELLO"
 
 def test_repeated_characters():
     """Test with repeated characters"""
@@ -44,6 +45,6 @@ def test_long_strings():
     """Test with longer strings"""
     str1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     str2 = "ZYXWVUTSRQPONMLKJIHGFEDCBA"
-    # Technically, the first or last character is a common subsequence
+    # Either first or last character will be a valid LCS
     result = longest_common_subsequence(str1, str2)
     assert result in ["A", "Z"]
