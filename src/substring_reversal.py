@@ -34,15 +34,13 @@ def reverse_substring(string: str, start: int, end: int) -> str:
     if start == end:
         return string
     
-    # Convert string to list for easy manipulation
-    chars = list(string)
+    # Split the string into three parts and reconstruct
+    prefix = string[:start]
+    substring = string[start:end]
+    suffix = string[end:]
     
-    # Reverse the substring in-place
-    left, right = start, end - 1
-    while left < right:
-        chars[left], chars[right] = chars[right], chars[left]
-        left += 1
-        right -= 1
+    # Reverse the specified substring
+    reversed_substring = substring[::-1]
     
-    # Convert back to string and return
-    return ''.join(chars)
+    # Combine the parts
+    return prefix + reversed_substring + suffix
