@@ -34,14 +34,24 @@ def sum_pairs_with_diff_nine(file_path):
     counted_pairs = set()
     
     for num in set(numbers):
-        # Pairs in both a+9=b and b+9=a order
-        if num + 9 in number_counts:
-            # Avoid double-counting pairs
-            pair = tuple(sorted((num, num + 9)))
-            if pair not in counted_pairs:
-                # Count pairs, carefully handling duplicate numbers
-                count = min(number_counts[num], number_counts[num + 9])
-                pair_sum += count * (pair[0] + pair[1])
+        # Check pairs in both a+9=b and b+9=a order
+        for target in [num + 9, num - 9]:
+            if target in number_counts:
+                # Avoid double-counting pairs
+                pair = tuple(sorted((num, target)))
+                
+                # Special handling for same number pairs
+                if pair[0] == pair[1]:
+                    if number_counts[pair[0]] >= 2:
+                        # Use the minimum count of full pair occurrences
+                        pair_count = number_counts[pair[0]] // 2
+                        pair_sum += pair_count * 2 * (pair[0] + pair[1])
+                else:
+                    # For different numbers, use the min count to avoid overcounting
+                    pair_count = min(number_counts[pair[0]], number_counts[pair[1]])
+                    pair_sum += pair_count * (pair[0] + pair[1])
+                
+                # Mark pair as counted
                 counted_pairs.add(pair)
     
     return pair_sum
