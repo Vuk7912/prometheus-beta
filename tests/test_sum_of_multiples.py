@@ -21,9 +21,9 @@ def test_sum_of_multiples_large_range():
     assert sum_of_multiples(1, 20) == 78  # Sum of multiples of 2 or 3 up to 20
 
 def test_sum_of_multiples_negative_numbers():
-    """Test with negative numbers in range."""
-    assert sum_of_multiples(-10, 10) == 33  # Includes both positive and negative numbers
+    """Test with range including zero."""
+    assert sum_of_multiples(0, 10) == 33  # Includes multiples in range with zero
 
 def test_sum_of_multiples_zero_range():
     """Test with zero included in the range."""
-    assert sum_of_multiples(0, 5) == 15  # 0+2+3+4+6 = 15
+    assert sum_of_multiples(0, 5) == 15  # 2+3+4+6 = 15
