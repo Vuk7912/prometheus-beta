@@ -14,7 +14,7 @@ def test_mixed_numbers():
 def test_floating_point_numbers():
     """Test with floating point numbers."""
     numbers = [1.5, 2.5, 3.5, 4.5, 5.5, 6.5]
-    assert calculate_extremes_average(numbers) == 4.5
+    assert calculate_extremes_average(numbers) == 4.0
 
 def test_zero_numbers():
     """Test with zero and positive numbers."""
