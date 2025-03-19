@@ -40,7 +40,6 @@ def rotate_and_reverse(string: str, rotations: int) -> str:
     reversed_string = string[::-1]
     
     # Rotate the reversed string
-    rotated = reversed_string[:len(reversed_string)-effective_rotations] + \
-              reversed_string[len(reversed_string)-effective_rotations:]
+    rotated = reversed_string[effective_rotations:] + reversed_string[:effective_rotations]
     
     return rotated
