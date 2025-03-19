@@ -18,7 +18,7 @@ def sum_of_multiples(min: int, max: int) -> int:
 
     # Ensure we only count numbers exactly divisible by 2 or 3
     multiples_sum = sum(
-        num for num in range(max(1, min), max + 1) 
+        num for num in range(min, max + 1) 
         if num % 2 == 0 or num % 3 == 0
     )
 
