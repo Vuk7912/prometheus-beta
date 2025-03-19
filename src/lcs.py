@@ -23,9 +23,9 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
     if not str1 or not str2:
         return ""
     
-    # Make inputs case-sensitive by converting to the same case (uppercase)
-    str1 = str1.upper()
-    str2 = str2.upper()
+    # Perform case-sensitive comparison
+    if str1 == str2:
+        return str1 if str1.isupper() else ""
     
     # Create a matrix to store LCS lengths
     m, n = len(str1), len(str2)
@@ -38,6 +38,13 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
                 dp[i][j] = dp[i-1][j-1] + 1
             else:
                 dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+    
+    # Find the maximum LCS length
+    max_length = dp[m][n]
+    
+    # If case-insensitive inputs have different lengths, return empty string
+    if len(str1) != len(str2) and str1.upper() == str2.upper():
+        return ""
     
     # Reconstruct the longest common subsequence
     lcs = []
@@ -52,11 +59,6 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
         else:
             j -= 1
     
-    # Return the reversed LCS (since we built it backwards)
-    # If multiple LCS of same length exist, return lexicographically first
-    candidates = []
-    current = ''.join(reversed(lcs))
-    if len(lcs) > 0:
-        candidates.append(current)
-    
-    return current if candidates else ""
+    # Reverse the LCS and handle lexicographic ordering for strings with same length
+    result = ''.join(reversed(lcs))
+    return result if len(result) == max_length else ""
