@@ -41,7 +41,7 @@ def test_edge_cases():
     test_cases = [
         ("abcdef", 0, 0, "abcdef"),  # No change
         ("abcdef", 3, 3, "abcdef"),  # No change
-        ("abcdef", 1, 5, "adcbef"),  # Partial reversal
+        ("abcdef", 1, 5, "aedcbf"),  # Partial reversal
         ("abcdef", 0, 6, "fedcba"),  # Full reversal
     ]
     
