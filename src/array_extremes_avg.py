@@ -22,5 +22,5 @@ def calculate_extremes_average(numbers):
     smallest_three = sorted_numbers[:3]
     largest_three = sorted_numbers[3:]
     
-    # Calculate and return the average
-    return (sum(smallest_three) + sum(largest_three)) / 6
+    # Calculate and return the average with precision
+    return round((sum(smallest_three) + sum(largest_three)) / 6, 2)
