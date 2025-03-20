@@ -20,7 +20,7 @@ def test_all_same_elements():
 def test_negative_numbers():
     """Test with an array containing negative numbers"""
     arr = [-1, -2, 3, 4, -5, 6, 7]
-    assert max_subarray_sum(arr, 3) == 17  # 6 + 7 + 4 = 17
+    assert max_subarray_sum(arr, 3) == 17  # 4 + 6 + 7 = 17
 
 def test_invalid_k_zero():
     """Test with k = 0"""
