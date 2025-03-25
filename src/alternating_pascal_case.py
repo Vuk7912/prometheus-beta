@@ -37,20 +37,15 @@ def convert_to_alternating_pascal_case(input_string: str) -> str:
     if len(words) == 1:
         return words[0].capitalize()
     
-    # Capitalize all words, preserving original casing where possible
-    capitalized_words = [
-        word.capitalize() if not word.isupper() 
-        else word for word in words
-    ]
+    # Always capitalize all words fully
+    capitalized_words = [word.capitalize() for word in words]
     
-    # Construct the final alternating pattern
+    # Construct the result making sure every word is fully capitalized
     result = []
-    for i, word in enumerate(capitalized_words):
-        # Even indices (0, 2, 4...) keep original word
-        # Odd indices (1, 3, 5...) get lowercased
-        result.append(word if i % 2 == 0 else word.lower())
+    for word in capitalized_words:
+        result.append(word)
     
-    # Always add the first word (fully capitalized) at the end
+    # Add the first word again to complete the pattern
     result.append(capitalized_words[0])
     
     return ''.join(result)
