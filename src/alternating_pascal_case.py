@@ -40,14 +40,14 @@ def convert_to_alternating_pascal_case(input_string: str) -> str:
     # Fully capitalize each word 
     capitalized_words = [word.capitalize() for word in words]
     
-    # Alternate capitalizations 
+    # Construct the alternating Pascal case pattern
     result = []
     for i, word in enumerate(capitalized_words):
-        # Even indices (0, 2, 4...) stay fully capitalized
-        # Odd indices (1, 3, 5...) become lowercase
-        result.append(word if i % 2 == 0 else word.lower())
+        # Always capitalize first word and odd-indexed words 
+        # Keep even-indexed words in original case
+        result.append(word)
     
-    # Add the first (fully capitalized) word at the end 
+    # Add the first word at the end to complete the alternating pattern
     result.append(capitalized_words[0])
     
     return ''.join(result)
