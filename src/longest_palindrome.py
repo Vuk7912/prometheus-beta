@@ -3,6 +3,7 @@ def find_longest_palindromic_substring(s: str) -> str:
     Find the longest palindromic substring in a given string.
     
     A palindrome is a string that reads the same backward as forward.
+    This function is case-sensitive.
     
     Args:
         s (str): The input string to search for palindromic substrings
@@ -32,7 +33,11 @@ def find_longest_palindromic_substring(s: str) -> str:
     
     # Helper function to expand around center
     def expand_around_center(left: int, right: int) -> tuple:
-        while left >= 0 and right < len(s) and s[left] == s[right]:
+        while (
+            left >= 0 and 
+            right < len(s) and 
+            s[left] == s[right]
+        ):
             left -= 1
             right += 1
         return left + 1, right - left - 1
