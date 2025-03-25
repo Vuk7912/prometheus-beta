@@ -4,9 +4,10 @@ def to_constant_case(input_string: str) -> str:
 
     This function takes a string and converts it to CONSTANT_CASE by:
     1. Removing leading/trailing whitespaces
-    2. Replacing non-alphanumeric characters with underscores
-    3. Converting the string to uppercase
-    4. Removing consecutive underscores
+    2. Converting camelCase or PascalCase to snake_case first
+    3. Replacing non-alphanumeric characters with underscores
+    4. Converting the string to uppercase
+    5. Removing consecutive underscores
 
     Args:
         input_string (str): The input string to convert
@@ -28,9 +29,15 @@ def to_constant_case(input_string: str) -> str:
     if not input_string:
         return ""
     
-    # Replace non-alphanumeric characters with underscores
     import re
-    converted = re.sub(r'[^a-zA-Z0-9]+', '_', input_string)
+    
+    # Convert camelCase/PascalCase to snake_case
+    # Insert underscore before any uppercase letter that follows a lowercase letter or number
+    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', input_string)
+    s2 = re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1)
+    
+    # Replace non-alphanumeric characters with underscores
+    converted = re.sub(r'[^a-zA-Z0-9]+', '_', s2)
     
     # Convert to uppercase
     converted = converted.upper()
