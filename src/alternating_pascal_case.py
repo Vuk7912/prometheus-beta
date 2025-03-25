@@ -36,9 +36,19 @@ def convert_to_alternating_pascal_case(input_string: str) -> str:
     # Capitalize all words
     capitalized_words = [word.capitalize() for word in words]
     
-    # Alternate capitalizations starting from first word
+    # If only one word, return capitalized
+    if len(capitalized_words) == 1:
+        return capitalized_words[0]
+    
+    # Alternate capitalizations 
     result = []
     for i, word in enumerate(capitalized_words):
+        # Alternate between full word and lowercase word, starting from first word
         result.append(word if i % 2 == 0 else word.lower())
+    
+    # Ensure the result has the correct pattern by potentially adding an additional word
+    if len(result) > 1:
+        # Copy the first word to the end if needed
+        result.append(capitalized_words[0])
     
     return ''.join(result)
