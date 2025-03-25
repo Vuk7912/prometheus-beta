@@ -34,10 +34,12 @@ def to_constant_case(input_string: str) -> str:
     # Convert camelCase/PascalCase to snake_case
     # Insert underscore before any uppercase letter that follows a lowercase letter or number
     s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', input_string)
-    s2 = re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1)
+    s2 = re.sub('([a-z])([0-9])', r'\1_\2', s1)  # Separate letters from numbers
+    s3 = re.sub('([0-9])([A-Z])', r'\1_\2', s2)  # Separate numbers from uppercase letters
+    s4 = re.sub('([a-z0-9])([A-Z])', r'\1_\2', s3)
     
     # Replace non-alphanumeric characters with underscores
-    converted = re.sub(r'[^a-zA-Z0-9]+', '_', s2)
+    converted = re.sub(r'[^a-zA-Z0-9]+', '_', s4)
     
     # Convert to uppercase
     converted = converted.upper()
