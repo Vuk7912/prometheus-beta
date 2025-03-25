@@ -25,11 +25,17 @@ def generate_fibonacci_square_pair_sequence(n):
     
     # Generate the sequence
     while len(sequence) < n:
+        # Try next Fibonacci step
+        next_num = sequence[-1] + sequence[-2]
+        
         # Ensure the last two numbers' sum is a perfect square
         while not is_perfect_square(sequence[-1] + sequence[-2]):
-            # Generate next Fibonacci-like number
-            next_num = sequence[-1] + sequence[-2]
+            # Try the next combination
             sequence.append(next_num)
+            next_num = sequence[-1] + sequence[-2]
+        
+        # Add the next number for the perfect square
+        sequence.append(next_num)
         
         # If we have enough numbers, break
         if len(sequence) >= n:
@@ -48,5 +54,10 @@ def is_perfect_square(num):
     Returns:
         bool: True if the number is a perfect square, False otherwise.
     """
+    # Handle 0 and 1 as special cases
+    if num in (0, 1):
+        return True
+    
+    # Check if the square root is an integer
     root = int(math.sqrt(num))
     return root * root == num
