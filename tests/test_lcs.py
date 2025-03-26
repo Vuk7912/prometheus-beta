@@ -22,8 +22,9 @@ def test_no_common_subsequence():
 
 def test_case_sensitivity():
     """Test case sensitivity"""
-    assert longest_common_subsequence("AbC", "abc") == ""
+    assert longest_common_subsequence("AbC", "aBc") == ""
     assert longest_common_subsequence("AbC", "AbC") == "AbC"
+    assert longest_common_subsequence("ABC", "abc") == ""
 
 def test_invalid_input_types():
     """Test error handling for invalid input types"""
