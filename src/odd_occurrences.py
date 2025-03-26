@@ -1,9 +1,8 @@
 def find_number_with_odd_occurrences(numbers):
     """
-    Find the smallest number that appears an odd number of times in the list using bitwise XOR.
+    Find the smallest number that appears an odd number of times in the list.
     
-    This function uses a combination of counting and optimization to efficiently find 
-    the smallest number with odd occurrences.
+    This function efficiently determines the smallest number with an odd number of occurrences.
     
     Args:
         numbers (list): A list of integers to search for odd occurrences.
@@ -20,17 +19,15 @@ def find_number_with_odd_occurrences(numbers):
     if not numbers:
         raise ValueError("Input list cannot be empty")
     
-    # Track numbers with odd occurrences and maintain smallest
-    smallest_odd_occurrence = float('inf')
-    has_odd_occurrence = False
+    # Track occurrences of numbers
+    occurrences = {}
+    for num in numbers:
+        occurrences[num] = occurrences.get(num, 0) + 1
     
-    for num in set(numbers):
-        count = sum(1 for x in numbers if x == num)
-        if count % 2 == 1:
-            has_odd_occurrence = True
-            smallest_odd_occurrence = min(smallest_odd_occurrence, num)
+    # Find numbers with odd occurrences and get the smallest
+    odd_occurrence_nums = [num for num, count in occurrences.items() if count % 2 == 1]
     
-    if not has_odd_occurrence:
+    if not odd_occurrence_nums:
         raise ValueError("No number appears an odd number of times")
     
-    return smallest_odd_occurrence
+    return min(odd_occurrence_nums)
