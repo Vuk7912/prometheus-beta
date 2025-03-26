@@ -44,4 +44,19 @@ def find_palindrome_pairs(words):
             if is_palindrome(concat1):
                 palindrome_pairs.append([i, j])
     
+    # Special handling for empty string and length 1 cases
+    if len(words) > 1:
+        # Handle empty string cases manually
+        empty_indices = [i for i, word in enumerate(words) if word == ""]
+        non_empty_indices = [i for i, word in enumerate(words) if word != ""]
+        
+        for empty_idx in empty_indices:
+            for non_empty_idx in non_empty_indices:
+                # If the non-empty word is a palindrome, can form pairs with empty string
+                if is_palindrome(words[non_empty_idx]):
+                    if [empty_idx, non_empty_idx] not in palindrome_pairs:
+                        palindrome_pairs.append([empty_idx, non_empty_idx])
+                    if [non_empty_idx, empty_idx] not in palindrome_pairs:
+                        palindrome_pairs.append([non_empty_idx, empty_idx])
+    
     return palindrome_pairs
