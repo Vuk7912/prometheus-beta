@@ -13,7 +13,7 @@ def find_number_with_odd_occurrences(numbers):
     Raises:
         ValueError: If no number appears an odd number of times or the input list is empty.
     
-    Time Complexity: O(n)
+    Time Complexity: O(n log n)
     Space Complexity: O(1)
     """
     if not numbers:
@@ -25,9 +25,9 @@ def find_number_with_odd_occurrences(numbers):
         occurrences[num] = occurrences.get(num, 0) + 1
     
     # Find numbers with odd occurrences and get the smallest
-    odd_occurrence_nums = [num for num, count in occurrences.items() if count % 2 == 1]
+    odd_occurrence_nums = sorted([num for num, count in occurrences.items() if count % 2 == 1])
     
     if not odd_occurrence_nums:
         raise ValueError("No number appears an odd number of times")
     
-    return min(odd_occurrence_nums)
+    return odd_occurrence_nums[0]
