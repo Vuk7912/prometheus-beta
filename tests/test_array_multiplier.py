@@ -29,6 +29,6 @@ def test_different_length_arrays():
         multiply_array_elements([1, 2], [1, 2, 3])
 
 def test_incompatible_multiplication():
-    """Test that incompatible types raise TypeError"""
+    """Test that truly incompatible types raise TypeError"""
     with pytest.raises(TypeError):
-        multiply_array_elements([1, 'a'], ['b', 2])
+        multiply_array_elements([1, object()], [2, 3])
