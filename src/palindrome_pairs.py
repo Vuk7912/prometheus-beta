@@ -39,6 +39,7 @@ def find_palindrome_pairs(words):
             
             # Check both concatenation orders
             concat1 = words[i] + words[j]
+            concat2 = words[j] + words[i]
             
             if is_palindrome(concat1):
                 palindrome_pairs.append([i, j])
