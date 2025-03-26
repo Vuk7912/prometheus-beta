@@ -25,7 +25,7 @@ def sum_unique_even_numbers(numbers):
         if num % 2 == 0:
             even_counts[num] = even_counts.get(num, 0) + 1
     
-    # Sum only the unique even numbers
+    # Sum only the unique even numbers (those appearing exactly once)
     unique_even_sum = sum(num for num, count in even_counts.items() if count == 1)
     
     return unique_even_sum
