@@ -39,12 +39,11 @@ def find_palindrome_pairs(words):
             
             # Check both concatenation orders
             concat1 = words[i] + words[j]
-            concat2 = words[j] + words[i]
             
             if is_palindrome(concat1):
-                palindrome_pairs.append([i, j])
-            
-            if is_palindrome(concat2):
-                palindrome_pairs.append([j, i])
+                # Ensure the pair is unique by sorting
+                pair = sorted([i, j])
+                if pair not in palindrome_pairs:
+                    palindrome_pairs.append(pair)
     
     return palindrome_pairs
