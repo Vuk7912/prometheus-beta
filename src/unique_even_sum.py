@@ -7,6 +7,7 @@ def sum_unique_even_numbers(numbers):
     
     Returns:
         int: Sum of even numbers that appear only once in the array.
+        Returns 0 if no unique even numbers exist.
     
     Raises:
         TypeError: If the input is not a list or contains non-integer elements.
@@ -26,6 +27,6 @@ def sum_unique_even_numbers(numbers):
             even_counts[num] = even_counts.get(num, 0) + 1
     
     # Sum only the unique even numbers (those appearing exactly once)
-    unique_even_sum = sum(num for num, count in even_counts.items() if count == 1)
+    unique_even_numbers = [num for num, count in even_counts.items() if count == 1]
     
-    return unique_even_sum
+    return sum(unique_even_numbers)
