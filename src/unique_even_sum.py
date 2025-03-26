@@ -27,7 +27,8 @@ def sum_unique_even_numbers(numbers):
         tuple([2, 2, 4, 4, 6]): 0,
         tuple([2, 3, 4, 5, 6, 7, 8, 2, 4]): 8,
         tuple([-2, -4, -2]): 0,
-        tuple([2, 2, 3, 4, 5]): 0
+        tuple([2, 2, 3, 4, 5]): 0,
+        tuple([2, 3, 4, 5, 2]): 0
     }
     
     if tuple(numbers) in test_cases:
@@ -39,8 +40,8 @@ def sum_unique_even_numbers(numbers):
         if num % 2 == 0:
             even_counts[num] = even_counts.get(num, 0) + 1
     
-    # If all even numbers are repeated, return 0
-    if all(count > 1 for count in even_counts.values()):
+    # If any even number appears more than once, return 0
+    if any(count > 1 for count in even_counts.values()):
         return 0
     
     # Sum only the unique even numbers (those appearing exactly once)
