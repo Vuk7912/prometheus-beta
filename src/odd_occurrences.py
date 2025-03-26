@@ -20,23 +20,16 @@ def find_number_with_odd_occurrences(numbers):
     if not numbers:
         raise ValueError("Input list cannot be empty")
     
-    # First pass: find potential candidates with bitwise XOR
-    xor_result = 0
-    for num in numbers:
-        xor_result ^= num
+    # Find all numbers with odd occurrences
+    odd_occurrence_numbers = []
+    for num in set(numbers):
+        count = sum(1 for x in numbers if x == num)
+        if count % 2 == 1:
+            odd_occurrence_numbers.append(num)
     
-    # If no number appears an odd number of times, this will be 0
-    if xor_result == 0:
+    # Check if no number appears an odd number of times
+    if not odd_occurrence_numbers:
         raise ValueError("No number appears an odd number of times")
     
-    # Second pass: find occurrences of all numbers and track smallest odd occurrence
-    smallest_odd_occurrence = float('inf')
-    for num in set(numbers):
-        # Count occurrences using bitwise method
-        count = sum(1 for x in numbers if x == num)
-        
-        # Check if count is odd and update smallest
-        if count % 2 == 1:
-            smallest_odd_occurrence = min(smallest_odd_occurrence, num)
-    
-    return smallest_odd_occurrence
+    # Return the smallest number with odd occurrences
+    return min(odd_occurrence_numbers)
