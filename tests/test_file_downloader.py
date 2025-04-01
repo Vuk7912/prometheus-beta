@@ -5,7 +5,7 @@ import tempfile
 from unittest.mock import MagicMock
 from src.file_downloader import download_file
 
-def test_download_file_success(mocker):
+def test_download_file_success(monkeypatch):
     """Test successful file download."""
     # Create a temp directory for downloads
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -17,7 +17,10 @@ def test_download_file_success(mocker):
         mock_response.raise_for_status = MagicMock()
         
         # Patch requests.get to return the mock response
-        mocker.patch('requests.get', return_value=mock_response)
+        def mock_get(url, stream=True):
+            return mock_response
+        
+        monkeypatch.setattr(requests, 'get', mock_get)
 
         # Perform download
         test_url = 'https://example.com/test.txt'
@@ -35,20 +38,22 @@ def test_download_file_empty_url():
     with pytest.raises(ValueError, match="URL cannot be empty"):
         download_file("  ")
 
-def test_download_file_invalid_url(mocker):
+def test_download_file_invalid_url(monkeypatch):
     """Test handling of invalid URLs."""
     # Create a mock response that raises an exception
-    mock_response = MagicMock()
-    mock_response.raise_for_status.side_effect = requests.RequestException("Invalid URL")
+    def mock_get(url, stream=True):
+        response = MagicMock()
+        response.raise_for_status.side_effect = requests.RequestException("Invalid URL")
+        return response
     
-    mocker.patch('requests.get', return_value=mock_response)
+    monkeypatch.setattr(requests, 'get', mock_get)
 
     with tempfile.TemporaryDirectory() as tmpdir:
         test_url = 'https://nonexistent.example.com/file.txt'
         with pytest.raises(requests.RequestException):
             download_file(test_url, destination_folder=tmpdir)
 
-def test_download_file_default_destination(mocker):
+def test_download_file_default_destination(monkeypatch):
     """Test download with default destination."""
     # Create a temp directory as current working directory
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -65,7 +70,10 @@ def test_download_file_default_destination(mocker):
             mock_response.raise_for_status = MagicMock()
             
             # Patch requests.get to return the mock response
-            mocker.patch('requests.get', return_value=mock_response)
+            def mock_get(url, stream=True):
+                return mock_response
+            
+            monkeypatch.setattr(requests, 'get', mock_get)
 
             # Perform download
             test_url = 'https://example.com/test.txt'
@@ -78,9 +86,12 @@ def test_download_file_default_destination(mocker):
             # Restore original working directory
             os.chdir(original_cwd)
 
-def test_download_file_filename_extraction(mocker):
+def test_download_file_filename_extraction(monkeypatch):
     """Test filename extraction from different sources."""
     with tempfile.TemporaryDirectory() as tmpdir:
+        # Track which response to use
+        mock_responses = []
+        
         # Test URL-based filename
         url1 = 'https://example.com/files/document.pdf'
         mock_response1 = MagicMock()
@@ -88,6 +99,7 @@ def test_download_file_filename_extraction(mocker):
         mock_response1.iter_content.return_value = [b'PDF content']
         mock_response1.headers = {}
         mock_response1.raise_for_status = MagicMock()
+        mock_responses.append(mock_response1)
         
         # Test Content-Disposition filename
         url2 = 'https://example.com/download'
@@ -96,9 +108,13 @@ def test_download_file_filename_extraction(mocker):
         mock_response2.iter_content.return_value = [b'Attachment content']
         mock_response2.headers = {'Content-Disposition': 'attachment; filename="custom.txt"'}
         mock_response2.raise_for_status = MagicMock()
+        mock_responses.append(mock_response2)
         
         # Patch requests.get to return mock responses
-        mocker.patch('requests.get', side_effect=[mock_response1, mock_response2])
+        def mock_get(url, stream=True):
+            return mock_responses.pop(0)
+        
+        monkeypatch.setattr(requests, 'get', mock_get)
 
         # URL-based filename
         file1 = download_file(url1, destination_folder=tmpdir)
