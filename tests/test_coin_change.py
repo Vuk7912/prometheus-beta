@@ -35,7 +35,7 @@ def test_single_coin_denomination():
 
 def test_large_amount():
     """Test handling of larger amounts"""
-    assert min_coins([1, 5, 10, 25], 100) == 10  # 10 * 10-cent coins
+    assert min_coins([1, 5, 10, 25], 100) == 4  # 4 * 25-cent coins
     
 def test_impossible_change():
     """Test scenarios where exact change is impossible"""
