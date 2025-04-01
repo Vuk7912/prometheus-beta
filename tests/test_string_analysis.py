@@ -19,7 +19,7 @@ def test_uppercase_string():
 def test_mixed_case_string():
     """Test a string with mixed case letters."""
     result = count_vowels_consonants("PrOgRaMmInG")
-    assert result == {'vowels': 2, 'consonants': 9}
+    assert result == {'vowels': 3, 'consonants': 8}
 
 def test_string_with_spaces():
     """Test a string with spaces."""
