@@ -1,2 +1,1 @@
-import pytest
-import requests_mock
+# No content needed for now
