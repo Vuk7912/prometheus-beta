@@ -42,6 +42,8 @@ def count_subarrays_with_product_less_than_k(nums, k):
             left += 1
         
         # Count subarrays
-        count += right - left + 1
+        # If left > right, no valid subarrays
+        if left <= right:
+            count += right - left + 1
     
     return count
