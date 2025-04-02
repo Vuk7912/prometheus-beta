@@ -26,17 +26,6 @@ def stable_marriage(preferences):
     
     n = len(men)
     
-    # Detect impossible preferences
-    for m1 in range(n):
-        for m2 in range(n):
-            if m1 == m2:
-                continue
-            
-            # Check direct swap preference
-            if (men[m1].index(m2) < men[m1].index(m1) and 
-                women[m2].index(m1) < women[m2].index(m2)):
-                raise ValueError("No stable matching possible")
-    
     # Initialize data structures
     men_free = list(range(n))
     women_partners = [None] * n
@@ -49,6 +38,10 @@ def stable_marriage(preferences):
     total_proposals = 0
     
     while men_free and total_proposals < max_proposals:
+        # No men left or too many proposals
+        if not men_free:
+            break
+        
         # Take a free man
         man = men_free.pop(0)
         
