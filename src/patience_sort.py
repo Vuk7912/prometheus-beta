@@ -1,6 +1,12 @@
-from typing import List, TypeVar, Comparable
+from typing import List, TypeVar, Protocol
 
-def patience_sort(arr: List[Comparable]) -> List[Comparable]:
+class Comparable(Protocol):
+    """Protocol for objects that can be compared"""
+    def __lt__(self: 'T', other: 'T') -> bool: ...
+
+T = TypeVar('T', bound=Comparable)
+
+def patience_sort(arr: List[T]) -> List[T]:
     """
     Implement the Patience Sorting algorithm.
     
@@ -12,10 +18,10 @@ def patience_sort(arr: List[Comparable]) -> List[Comparable]:
     Space Complexity: O(n)
     
     Args:
-        arr (List[Comparable]): The input list to be sorted
+        arr (List[T]): The input list to be sorted
     
     Returns:
-        List[Comparable]: A new sorted list
+        List[T]: A new sorted list
     
     Raises:
         TypeError: If the input is not a list or contains incomparable elements
