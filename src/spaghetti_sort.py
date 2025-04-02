@@ -26,20 +26,20 @@ def spaghetti_sort(arr):
     if len(arr) <= 1:
         return arr.copy()
     
-    # Check for comparability and create 'noodles'
-    noodles = []
-    for idx, val in enumerate(arr):
-        # Check if elements are comparable
-        try:
-            all(val <= x for x in noodles)
-        except TypeError:
-            # If comparison fails, likely due to incomparable types
-            raise ValueError("List contains non-comparable elements")
+    # Try to create a sorted list to test comparability
+    try:
+        # Create a copy of the input list to avoid modifying the original
+        sorted_arr = arr.copy()
         
-        noodles.append((val, idx))
+        # Bubble sort-like implementation that mimics spaghetti sort concept
+        for i in range(len(sorted_arr)):
+            for j in range(0, len(sorted_arr) - i - 1):
+                if sorted_arr[j] > sorted_arr[j + 1]:
+                    # Swap elements
+                    sorted_arr[j], sorted_arr[j + 1] = sorted_arr[j + 1], sorted_arr[j]
+        
+        return sorted_arr
     
-    # Sort the noodles based on their length (value)
-    sorted_noodles = sorted(noodles, key=lambda x: x[0])
-    
-    # Return the sorted elements preserving original values
-    return [noodle[0] for noodle in sorted_noodles]
+    except TypeError:
+        # This will catch any comparison failures
+        raise ValueError("List contains non-comparable elements")
