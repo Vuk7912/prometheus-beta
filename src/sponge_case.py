@@ -13,7 +13,7 @@ def to_sponge_case(text: str) -> str:
     
     Examples:
         >>> to_sponge_case("hello world")
-        'HeLlO wOrLd'
+        'HeLlO WoRlD'
         >>> to_sponge_case("")
         ''
     """
@@ -23,6 +23,6 @@ def to_sponge_case(text: str) -> str:
     
     # Convert to sponge case
     return ''.join(
-        char.upper() if i % 2 == 0 else char.lower() 
+        char.upper() if (len([c for c in text[:i] if c.isalpha()]) % 2 == 0) else char.lower() 
         for i, char in enumerate(text)
     )
