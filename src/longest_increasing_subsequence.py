@@ -33,6 +33,10 @@ def find_longest_increasing_subsequence(arr):
     # Length of the input array
     n = len(arr)
     
+    # If all elements are same or reverse sorted
+    if len(set(arr)) == 1 or all(arr[i] >= arr[i+1] for i in range(len(arr)-1)):
+        return 1, [min(arr)]
+    
     # Dynamic programming approach
     # lengths[i] stores the length of the LIS ending at index i
     lengths = [1] * n
