@@ -58,12 +58,12 @@ def test_impossible_matching():
     """Test scenario where no stable matching is possible."""
     impossible_preferences = {
         'men': [
-            [1, 0],  # Prefer partner of the other preference item
-            [0, 1]
+            [1, 0],  # man 0 prefers woman 1 first
+            [0, 1]   # man 1 prefers woman 0 first
         ],
         'women': [
-            [0, 1],  # Same issue from women's side
-            [1, 0]
+            [1, 0],  # woman 0 prefers man 1 first
+            [0, 1]   # woman 1 prefers man 0 first
         ]
     }
     with pytest.raises(ValueError, match="No stable matching possible"):
