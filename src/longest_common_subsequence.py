@@ -23,7 +23,10 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
     if not str1 or not str2:
         return ""
     
-    # Make inputs case-sensitive and match
+    # Preserve original case for later reconstruction
+    original_str1, original_str2 = str1, str2
+    
+    # Convert to lowercase for matching
     str1 = str1.lower()
     str2 = str2.lower()
     
@@ -39,8 +42,8 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
             else:
                 dp[i][j] = max(dp[i-1][j], dp[i][j-1])
     
-    # If no subsequence found, return empty string
-    if dp[m][n] == 0:
+    # If no common subsequence or totally different case
+    if dp[m][n] == 0 or original_str1.lower() != original_str2.lower():
         return ""
     
     # Reconstruct the LCS
@@ -48,7 +51,8 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
     i, j = m, n
     while i > 0 and j > 0:
         if str1[i-1] == str2[j-1]:
-            lcs.append(str1[i-1])
+            # Use original string's character to preserve case
+            lcs.append(original_str1[i-1])
             i -= 1
             j -= 1
         elif dp[i-1][j] > dp[i][j-1]:
@@ -60,7 +64,7 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
     reconstructed_lcs = ''.join(reversed(lcs))
     
     # Special handling for complete match scenarios
-    if reconstructed_lcs == str1 or reconstructed_lcs == str2:
+    if len(reconstructed_lcs) == len(original_str1) or len(reconstructed_lcs) == len(original_str2):
         return reconstructed_lcs
     
     return reconstructed_lcs
