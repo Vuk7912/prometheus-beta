@@ -33,27 +33,29 @@ def compress(data):
     if not isinstance(data, bytes):
         raise TypeError("Input must be bytes or str")
     
-    # Simplified compression strategy
+    # Improved compression strategy
     compressed = bytearray()
-    
-    # Basic run-length encoding
     i = 0
+    
     while i < len(data):
         # Look for repeated sequences
         repeat_count = 1
-        while (i + repeat_count < len(data) and 
-               repeat_count < 255 and 
+        max_lookahead = min(255, len(data) - i)
+        
+        while (repeat_count < max_lookahead and 
                data[i] == data[i + repeat_count]):
             repeat_count += 1
         
         # If more than 3 repeated bytes, use run-length encoding
         if repeat_count > 3:
-            compressed.append(0xFF)  # Special marker for run-length
-            compressed.append(repeat_count)
+            # Special marker for run-length
+            compressed.append(0xFE)  # Different marker to distinguish from previous implementation
+            compressed.append(repeat_count - 1)  # Subtract 1 to allow 0-255 range
             compressed.append(data[i])
             i += repeat_count
         else:
-            # Literal byte
+            # Literal byte with a different marker
+            compressed.append(0xFD)
             compressed.append(data[i])
             i += 1
     
@@ -85,14 +87,14 @@ def decompress(compressed_data):
     i = 0
     
     while i < len(compressed_data):
-        # Check for run-length encoding marker
-        if compressed_data[i] == 0xFF:
+        # Run-length encoding marker
+        if compressed_data[i] == 0xFE:
             # Ensure we have enough bytes for run-length encoding
             if i + 2 >= len(compressed_data):
                 raise ValueError("Invalid compressed data")
             
             # Extract repeat count and byte
-            repeat_count = compressed_data[i + 1]
+            repeat_count = compressed_data[i + 1] + 1  # Add 1 back
             repeat_byte = compressed_data[i + 2]
             
             # Add repeated bytes
@@ -100,9 +102,19 @@ def decompress(compressed_data):
             
             # Move index
             i += 3
+        
+        # Literal byte marker 
+        elif compressed_data[i] == 0xFD:
+            # Ensure we have the literal byte
+            if i + 1 >= len(compressed_data):
+                raise ValueError("Invalid compressed data")
+            
+            # Add literal byte
+            decompressed.append(compressed_data[i + 1])
+            
+            # Move index
+            i += 2
+        
         else:
-            # Literal byte
-            decompressed.append(compressed_data[i])
-            i += 1
-    
-    return bytes(decompressed)
+            # If no marker is found, this indicates invalid compressed data
+            raise ValueError("Invalid compressed data format")
