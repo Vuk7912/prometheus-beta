@@ -34,7 +34,10 @@ def stable_marriage(preferences):
     # Track proposal attempts for each man
     proposals_count = [0] * n
     
-    while men_free:
+    max_proposals = n * n  # Prevent infinite loop
+    total_proposals = 0
+    
+    while men_free and total_proposals < max_proposals:
         # Take a free man
         man = men_free.pop(0)
         
@@ -48,6 +51,7 @@ def stable_marriage(preferences):
         
         woman_index = preference_list[proposals_count[man]]
         proposals_count[man] += 1
+        total_proposals += 1
         
         # Check if woman is free
         if women_partners[woman_index] is None:
@@ -70,6 +74,10 @@ def stable_marriage(preferences):
             else:
                 # Woman prefers current partner
                 men_free.append(man)
+    
+    # Check if matching is complete
+    if None in men_partners or None in women_partners:
+        raise ValueError("No stable matching possible")
     
     # Create result dictionary
     result = {}
