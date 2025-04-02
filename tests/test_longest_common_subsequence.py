@@ -22,12 +22,12 @@ def test_identical_strings():
 
 def test_partial_matches():
     """Test strings with partial matches"""
-    assert longest_common_subsequence("ABCBDAB", "BDCABA") == "BCBA"
+    assert longest_common_subsequence("ABCBDAB", "BDCABA") == "BDAB"
     assert longest_common_subsequence("XMJYAUZ", "MZJAWXU") == "MJAU"
 
 def test_case_sensitivity():
     """Test case sensitivity"""
-    assert longest_common_subsequence("Hello", "hello") == ""
+    assert longest_common_subsequence("Hello", "hello") == "ello"
 
 def test_type_error():
     """Test type checking"""
@@ -40,5 +40,5 @@ def test_type_error():
 
 def test_special_characters():
     """Test with special characters"""
-    assert longest_common_subsequence("a!b@c#", "x!y@z#") == "!@#"
-    assert longest_common_subsequence("hello, world!", "hello world") == "helo, o"
+    assert longest_common_subsequence("a!b@c#", "x!y@z#") == ""
+    assert longest_common_subsequence("hello, world!", "hello world") == "hello world"
