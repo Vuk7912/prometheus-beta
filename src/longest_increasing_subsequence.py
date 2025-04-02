@@ -67,4 +67,38 @@ def find_longest_increasing_subsequence(arr):
         subsequence.insert(0, arr[current])
         current = predecessors[current]
     
+    # Ensure the subsequence is the lexicographically smallest
+    if len(subsequence) == max_length:
+        smallest_subsequence = [
+            seq for seq in _all_subsequences(arr, max_length)
+            if seq == sorted(seq)
+        ][0]
+        return max_length, smallest_subsequence
+    
     return max_length, subsequence
+
+def _all_subsequences(arr, length):
+    """
+    Find all subsequences of a specific length that are increasing.
+    
+    Args:
+        arr (list): Input list
+        length (int): Length of subsequences to find
+    
+    Returns:
+        list: List of all increasing subsequences of given length
+    """
+    def backtrack(start, current_seq):
+        if len(current_seq) == length:
+            result.append(list(current_seq))
+            return
+        
+        for i in range(start, len(arr)):
+            if not current_seq or arr[i] > current_seq[-1]:
+                current_seq.append(arr[i])
+                backtrack(i + 1, current_seq)
+                current_seq.pop()
+    
+    result = []
+    backtrack(0, [])
+    return result
