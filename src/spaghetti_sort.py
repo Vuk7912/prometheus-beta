@@ -26,11 +26,17 @@ def spaghetti_sort(arr):
     if len(arr) <= 1:
         return arr.copy()
     
-    # Create 'noodles' - pairs of (value, original_index)
-    try:
-        noodles = [(val, idx) for idx, val in enumerate(arr)]
-    except TypeError:
-        raise ValueError("List contains non-comparable elements")
+    # Check for comparability and create 'noodles'
+    noodles = []
+    for idx, val in enumerate(arr):
+        # Check if elements are comparable
+        try:
+            all(val <= x for x in noodles)
+        except TypeError:
+            # If comparison fails, likely due to incomparable types
+            raise ValueError("List contains non-comparable elements")
+        
+        noodles.append((val, idx))
     
     # Sort the noodles based on their length (value)
     sorted_noodles = sorted(noodles, key=lambda x: x[0])
