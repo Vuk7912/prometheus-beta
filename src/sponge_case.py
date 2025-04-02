@@ -21,8 +21,17 @@ def to_sponge_case(text: str) -> str:
     if not isinstance(text, str):
         raise TypeError("Input must be a string")
     
-    # Convert to sponge case
-    return ''.join(
-        char.upper() if (len([c for c in text[:i] if c.isalpha()]) % 2 == 0) else char.lower() 
-        for i, char in enumerate(text)
-    )
+    # Track alpha character count to determine case
+    alpha_count = 0
+    result = []
+    
+    for char in text:
+        if char.isalpha():
+            # Alternate case for alphabetic characters
+            result.append(char.upper() if alpha_count % 2 == 0 else char.lower())
+            alpha_count += 1
+        else:
+            # Non-alphabetic characters remain unchanged
+            result.append(char)
+    
+    return ''.join(result)
