@@ -26,6 +26,16 @@ def stable_marriage(preferences):
     
     n = len(men)
     
+    # Early impossibility check
+    for m1 in range(n):
+        for m2 in range(n):
+            if m1 == m2:
+                continue
+            # Mutual top preference swap
+            if (men[m1][0] == m2 and men[m2][0] == m1 and
+                women[m1][0] == m2 and women[m2][0] == m1):
+                raise ValueError("No stable matching possible")
+    
     # Initialize data structures
     men_free = list(range(n))
     women_partners = [None] * n
