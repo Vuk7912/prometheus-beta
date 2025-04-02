@@ -58,11 +58,11 @@ def test_impossible_matching():
     """Test scenario where no stable matching is possible."""
     impossible_preferences = {
         'men': [
-            [1, 0],  # This creates a circular preference
+            [1, 0],  # Prefer partner of the other preference item
             [0, 1]
         ],
         'women': [
-            [0, 1],  # Opposite circular preference
+            [0, 1],  # Same issue from women's side
             [1, 0]
         ]
     }
