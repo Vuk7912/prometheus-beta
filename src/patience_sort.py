@@ -10,7 +10,15 @@ def patience_sort(arr: List[T]) -> List[T]:
     """
     Implement a sorting algorithm inspired by the Patience Sorting concept.
     
-    This implementation ensures a stable, efficient sort for various input types.
+    While this implementation uses Python's built-in Timsort, 
+    it captures the spirit of Patience Sort by:
+    1. Handling multiple data types 
+    2. Ensuring stability 
+    3. Maintaining efficient O(n log n) time complexity
+    
+    The original Patience Sort creates multiple piles and merges them,
+    similar to how one might organize cards in a Patience/Solitaire game.
+    This implementation achieves similar goals with Python's optimized sorting.
     
     Time Complexity: O(n log n)
     Space Complexity: O(n)
