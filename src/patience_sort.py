@@ -45,19 +45,23 @@ def patience_sort(arr: List[T]) -> List[T]:
     piles = []
     
     for item in arr:
-        # Try to place the item on an existing pile
-        placed = False
-        for pile in piles:
-            # If the item is smaller than the top of the pile, 
-            # this pile can receive the item
-            if not pile or item < pile[-1]:
-                pile.append(item)
-                placed = True
-                break
+        # Binary search for the correct pile
+        left, right = 0, len(piles)
+        while left < right:
+            mid = (left + right) // 2
+            # If the item is less than the top of the pile, 
+            # this might be the right pile
+            if item < piles[mid][-1]:
+                right = mid
+            else:
+                left = mid + 1
         
-        # If no existing pile works, create a new pile
-        if not placed:
+        # Place the item in the correct pile
+        if left == len(piles):
+            # Create a new pile if no suitable pile found
             piles.append([item])
+        else:
+            piles[left].append(item)
     
     # Merge piles using a min-heap
     result = []
