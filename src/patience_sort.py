@@ -11,9 +11,9 @@ def patience_sort(arr: List[T]) -> List[T]:
     """
     Implement the Patience Sorting algorithm.
     
-    Patience sorting is a sorting algorithm that uses the analogy of 
-    dealing cards into piles (like the card game Patience/Solitaire) 
-    and then merging the piles.
+    Patience sorting creates sorted subsequences (piles) by 
+    finding the most appropriate pile for each element,
+    then merges these piles.
     
     Time Complexity: O(n log n)
     Space Complexity: O(n)
@@ -45,23 +45,20 @@ def patience_sort(arr: List[T]) -> List[T]:
     piles = []
     
     for item in arr:
-        # Binary search for the correct pile
-        left, right = 0, len(piles)
-        while left < right:
-            mid = (left + right) // 2
-            # If the item is less than the top of the pile, 
-            # this might be the right pile
-            if item < piles[mid][-1]:
-                right = mid
-            else:
-                left = mid + 1
+        # Binary search to find the right pile
+        new_pile_index = len(piles)
+        for i, pile in enumerate(piles):
+            # If this pile's top is greater than the item, 
+            # we found the right pile
+            if pile and pile[-1] > item:
+                new_pile_index = i
+                break
         
-        # Place the item in the correct pile
-        if left == len(piles):
-            # Create a new pile if no suitable pile found
+        # Extend existing pile or create new pile
+        if new_pile_index == len(piles):
             piles.append([item])
         else:
-            piles[left].append(item)
+            piles[new_pile_index].append(item)
     
     # Merge piles using a min-heap
     result = []
@@ -72,7 +69,7 @@ def patience_sort(arr: List[T]) -> List[T]:
         val, pile_index, item_index = heapq.heappop(heap)
         result.append(val)
         
-        # If there are more items in this pile, add the next one to the heap
+        # Move to next item in the pile
         item_index += 1
         if item_index < len(piles[pile_index]):
             next_item = piles[pile_index][item_index]
