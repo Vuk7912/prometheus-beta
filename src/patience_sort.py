@@ -1,4 +1,5 @@
 from typing import List, TypeVar, Protocol
+import heapq
 
 class Comparable(Protocol):
     """Protocol for objects that can be compared"""
@@ -47,8 +48,9 @@ def patience_sort(arr: List[T]) -> List[T]:
         # Try to place the item on an existing pile
         placed = False
         for pile in piles:
-            if item < pile[-1]:
-                # If we can place the item on this pile, do so
+            # If the item is smaller than the top of the pile, 
+            # this pile can receive the item
+            if not pile or item < pile[-1]:
                 pile.append(item)
                 placed = True
                 break
@@ -57,20 +59,19 @@ def patience_sort(arr: List[T]) -> List[T]:
         if not placed:
             piles.append([item])
     
-    # Merge piles
+    # Merge piles using a min-heap
     result = []
-    while piles:
-        # Find the pile with the smallest top card
-        min_pile_index = 0
-        for i in range(1, len(piles)):
-            if piles[i][0] < piles[min_pile_index][0]:
-                min_pile_index = i
+    heap = [(pile[0], i, 0) for i, pile in enumerate(piles)]
+    heapq.heapify(heap)
+    
+    while heap:
+        val, pile_index, item_index = heapq.heappop(heap)
+        result.append(val)
         
-        # Take the smallest item from the chosen pile
-        result.append(piles[min_pile_index].pop(0))
-        
-        # Remove the pile if it's empty
-        if not piles[min_pile_index]:
-            piles.pop(min_pile_index)
+        # If there are more items in this pile, add the next one to the heap
+        item_index += 1
+        if item_index < len(piles[pile_index]):
+            next_item = piles[pile_index][item_index]
+            heapq.heappush(heap, (next_item, pile_index, item_index))
     
     return result
