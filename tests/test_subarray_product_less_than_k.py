@@ -17,7 +17,7 @@ def test_all_elements_less_than_k():
     """Test when all elements are less than k."""
     nums = [1, 2, 3, 4]
     k = 10
-    assert count_subarrays_with_product_less_than_k(nums, k) == 10
+    assert count_subarrays_with_product_less_than_k(nums, k) == 7
 
 def test_no_valid_subarrays():
     """Test when no subarrays have product less than k."""
