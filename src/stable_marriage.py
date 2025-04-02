@@ -26,6 +26,19 @@ def stable_marriage(preferences):
     
     n = len(men)
     
+    # Check for circular preferences
+    def has_circular_preference(men_prefs, women_prefs):
+        for m1 in range(n):
+            for m2 in range(m1+1, n):
+                # Check mutual preference
+                if (men_prefs[m1].index(m2) < men_prefs[m1].index(m1) and 
+                    women_prefs[m2].index(m1) < women_prefs[m2].index(m2)):
+                    return True
+        return False
+    
+    if has_circular_preference(men, women):
+        raise ValueError("No stable matching possible")
+    
     # Initialize data structures
     men_free = list(range(n))
     women_partners = [None] * n
