@@ -26,6 +26,21 @@ def stable_marriage(preferences):
     
     n = len(men)
     
+    # Detect impossible preferences more rigorously
+    def is_impossible_match(men_prefs, women_prefs):
+        for m1 in range(n):
+            for m2 in range(n):
+                if m1 == m2:
+                    continue
+                # Check if both m1 and m2 prefer their 'opposite' partner
+                if (men_prefs[m1].index(m2) < men_prefs[m1].index(m1) and
+                    women_prefs[m2].index(m1) < women_prefs[m2].index(m2)):
+                    return True
+        return False
+    
+    if is_impossible_match(men, women):
+        raise ValueError("No stable matching possible")
+    
     # Initialize data structures
     men_free = list(range(n))
     women_partners = [None] * n
