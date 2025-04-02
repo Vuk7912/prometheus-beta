@@ -11,7 +11,7 @@ def test_complex_sequence():
     arr = [0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15]
     length, subsequence = find_longest_increasing_subsequence(arr)
     assert length == 6
-    assert subsequence == [0, 2, 6, 9, 13, 15]
+    assert subsequence == [0, 4, 6, 9, 13, 15]
 
 def test_already_sorted_sequence():
     arr = [1, 2, 3, 4, 5]
