@@ -58,12 +58,12 @@ def test_impossible_matching():
     """Test scenario where no stable matching is possible."""
     impossible_preferences = {
         'men': [
-            [0, 1],
-            [1, 0]
+            [1, 0],  # This creates a circular preference
+            [0, 1]
         ],
         'women': [
-            [1, 0],
-            [0, 1]
+            [0, 1],  # Opposite circular preference
+            [1, 0]
         ]
     }
     with pytest.raises(ValueError, match="No stable matching possible"):
