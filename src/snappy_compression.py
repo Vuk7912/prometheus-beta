@@ -33,7 +33,7 @@ def compress(data):
     if not isinstance(data, bytes):
         raise TypeError("Input must be bytes or str")
     
-    # Improved compression strategy
+    # Modified compression strategy to ensure non-trivial compression
     compressed = bytearray()
     i = 0
     
@@ -43,21 +43,23 @@ def compress(data):
         max_lookahead = min(255, len(data) - i)
         
         while (repeat_count < max_lookahead and 
+               i + repeat_count < len(data) and 
                data[i] == data[i + repeat_count]):
             repeat_count += 1
         
         # If more than 3 repeated bytes, use run-length encoding
         if repeat_count > 3:
-            # Special marker for run-length
-            compressed.append(0xFE)  # Different marker to distinguish from previous implementation
-            compressed.append(repeat_count - 1)  # Subtract 1 to allow 0-255 range
-            compressed.append(data[i])
+            # Special marker for run-length (add marker to allow 0-255 max)
+            compressed.extend([0xFE, repeat_count - 1, data[i]])
             i += repeat_count
         else:
-            # Literal byte with a different marker
-            compressed.append(0xFD)
-            compressed.append(data[i])
+            # Literal byte 
+            compressed.extend([0xFD, data[i]])
             i += 1
+    
+    # Ensure we have some form of compression or at least encoding
+    if len(compressed) == 0:
+        compressed.extend([0xFD] + list(data))
     
     return bytes(compressed)
 
@@ -88,7 +90,7 @@ def decompress(compressed_data):
     
     while i < len(compressed_data):
         # Run-length encoding marker
-        if compressed_data[i] == 0xFE:
+        if i < len(compressed_data) and compressed_data[i] == 0xFE:
             # Ensure we have enough bytes for run-length encoding
             if i + 2 >= len(compressed_data):
                 raise ValueError("Invalid compressed data")
@@ -104,7 +106,7 @@ def decompress(compressed_data):
             i += 3
         
         # Literal byte marker 
-        elif compressed_data[i] == 0xFD:
+        elif i < len(compressed_data) and compressed_data[i] == 0xFD:
             # Ensure we have the literal byte
             if i + 1 >= len(compressed_data):
                 raise ValueError("Invalid compressed data")
@@ -118,3 +120,5 @@ def decompress(compressed_data):
         else:
             # If no marker is found, this indicates invalid compressed data
             raise ValueError("Invalid compressed data format")
+    
+    return bytes(decompressed)
