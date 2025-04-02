@@ -40,5 +40,5 @@ def test_type_error():
 
 def test_special_characters():
     """Test with special characters"""
-    assert longest_common_subsequence("a!b@c#", "x!y@z#") == ""
+    assert longest_common_subsequence("a!b@c#", "x!y@z#") == "!@#"
     assert longest_common_subsequence("hello, world!", "hello world") == "hello world"
