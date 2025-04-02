@@ -38,6 +38,9 @@ def stable_marriage(preferences):
     total_proposals = 0
     
     while men_free and total_proposals < max_proposals:
+        if not men_free:
+            break
+        
         # Take a free man
         man = men_free.pop(0)
         
@@ -76,7 +79,7 @@ def stable_marriage(preferences):
                 men_free.append(man)
     
     # Check if matching is complete
-    if None in men_partners or None in women_partners:
+    if None in men_partners or None in women_partners or men_free:
         raise ValueError("No stable matching possible")
     
     # Create result dictionary
