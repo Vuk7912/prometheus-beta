@@ -28,10 +28,8 @@ def find_smallest_multiple_of_five(arr):
     current_sum = sum(arr)
     
     # Find the smallest positive integer to make the sum a multiple of 5
-    remainder = current_sum % 5
+    adjustment = 1
+    while (current_sum + adjustment) % 5 != 0:
+        adjustment += 1
     
-    # Determine the smallest adjustment to make a multiple of 5
-    if remainder == 0:
-        return 5  # If already a multiple, return 5 to satisfy the smallest positive requirement
-    
-    return 5 - remainder
+    return adjustment
