@@ -1,4 +1,5 @@
 import re
+import unicodedata
 
 def count_unique_words(text: str) -> int:
     """
@@ -22,8 +23,14 @@ def count_unique_words(text: str) -> int:
     if not text:
         return 0
     
-    # Convert to lowercase and remove punctuation
-    cleaned_text = re.sub(r'[^\w\s]', '', text.lower())
+    # Normalize Unicode characters and convert to lowercase
+    normalized_text = unicodedata.normalize('NFKD', text.lower())
+    
+    # Remove accents
+    text_without_accents = ''.join(c for c in normalized_text if not unicodedata.combining(c))
+    
+    # Remove punctuation
+    cleaned_text = re.sub(r'[^\w\s]', '', text_without_accents)
     
     # Split into words and remove extra whitespace
     words = cleaned_text.split()
