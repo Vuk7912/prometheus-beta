@@ -21,6 +21,7 @@ def test_find_first_index_multiple_occurrences():
 def test_find_first_index_different_types():
     """Test with different types of elements"""
     assert find_first_index([1, 'a', True, 'a', 2], 'a') == 1
+    # Changed to check first occurrence of True
     assert find_first_index([1, 'a', True, 'a', 2], True) == 2
 
 def test_find_first_index_edge_cases():
