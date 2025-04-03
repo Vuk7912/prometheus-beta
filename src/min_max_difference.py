@@ -17,7 +17,7 @@ def find_min_max_difference(number_string):
     
     # Split the string and convert to integers
     try:
-        numbers = [int(num.strip()) for num in number_string.split(',')]
+        numbers = [int(num.strip()) for num in number_string.split(',') if num.strip()]
     except ValueError:
         raise ValueError("Input must be a comma-separated string of integers")
     
