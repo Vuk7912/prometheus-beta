@@ -24,7 +24,8 @@ def find_first_index(arr, target):
     
     # Iterate through the array
     for index, value in enumerate(arr):
-        if value is target or value == target:
+        # Use strict equality for better type handling
+        if value is target or (type(value) == type(target) and value == target):
             return index
     
     # Target not found
