@@ -5,7 +5,7 @@ def test_count_a_occurrences():
     # Test various scenarios
     assert count_a_occurrences("Apple") == 1
     assert count_a_occurrences("banana") == 3
-    assert count_a_occurrences("JAVA") == 0
+    assert count_a_occurrences("JAVA") == 2  # Corrected expectation
     assert count_a_occurrences("a") == 1
     assert count_a_occurrences("A") == 1
     assert count_a_occurrences("") == 0
